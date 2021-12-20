@@ -15,6 +15,8 @@ public class CategoryVO {
 	
 	private int categoryIds2; 
 	
+	private int categoryIds3;
+	
 	private String categoryName;
 	
 	private String description;
