@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:svg="http://www.w3.org/2000/svg" 
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+   	<h:body> 
+		<h:head>
+		</h:head>
+      	<h:form>
+      	
+      		<table style="border: 1px solid black;">
+      			<tbody>
+      				<tr>
+      					<td style="border: 1px solid black;">
+      						Create New Company
+      					</td>
+      					<td style="border: 1px solid black;">
+      						<h:commandButton value="Create New Company" action="#{companyCreation.createDefaultCompany()}" />
+      					</td>
+      				</tr>
+      				<tr>
+      					<td style="border: 1px solid black;">
+      						Create Default DataBase Creation
+      					</td>
+      					<td style="border: 1px solid black;">
+      						<h:commandButton value="Default Database Creation Details" rendered="true" action="#{companyCreation.defaultDatabaseDetails()}" />
+      					</td>
+      				</tr>
+      				<tr>
+      					<td style="border: 1px solid black;">
+      						Future Entry Creation
+      					</td>
+      					<td style="border: 1px solid black;">
+      						<h:commandButton value="Future Entry Creation" action="#{recurringEntryGeneration.generateNextDurationOnlyForAllOrganization()}" />
+      					</td>
+      				</tr>
+      			</tbody>
+      		</table>
+     	</h:form>
+   	</h:body> 
+</html>	

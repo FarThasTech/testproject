@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://jboss.org/schema/seam/components"
+            xmlns:core="http://jboss.org/schema/seam/core"
+            xmlns:persistence="http://jboss.org/schema/seam/persistence"
+            xmlns:drools="http://jboss.org/schema/seam/drools"
+            xmlns:bpm="http://jboss.org/schema/seam/bpm"
+            xmlns:security="http://jboss.org/schema/seam/security"
+            xmlns:international="http://jboss.org/schema/seam/international"
+            xmlns:mail="http://jboss.org/schema/seam/mail"
+            xmlns:web="http://jboss.org/schema/seam/web"
+            xmlns:remoting="http://jboss.org/schema/seam/remoting"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:excel="http://jboss.org/schema/seam/excel"
+            xsi:schemaLocation=
+                "http://jboss.org/schema/seam/core http://jboss.org/schema/seam/core-2.3.xsd
+                 http://jboss.org/schema/seam/persistence http://jboss.org/schema/seam/persistence-2.3.xsd
+                 http://jboss.org/schema/seam/drools http://jboss.org/schema/seam/drools-2.3.xsd
+                 http://jboss.org/schema/seam/bpm http://jboss.org/schema/seam/bpm-2.3.xsd
+                 http://jboss.org/schema/seam/security http://jboss.org/schema/seam/security-2.3.xsd
+                 http://jboss.org/schema/seam/mail http://jboss.org/schema/seam/mail-2.3.xsd
+                 http://jboss.org/schema/seam/web http://jboss.org/schema/seam/web-2.3.xsd
+                 http://jboss.org/schema/seam/components http://jboss.org/schema/seam/components-2.3.xsd">
+
+   <core:init debug="@debug@" jndi-pattern="@jndiPattern@"/>
+
+   <core:manager concurrent-request-timeout="500"
+                 conversation-timeout="180000"
+                 conversation-id-parameter="cid"
+                 parent-conversation-id-parameter="pid"/>
+
+   <!-- Make sure this URL pattern is the same as that used by the Faces Servlet -->
+   	<web:multipart-filter create-temp-files="true" max-request-size="1000000" url-pattern="*.seam"/>
+    <web:hot-deploy-filter url-pattern="*.jsf"/>
+ 	<web:cache-control-filter name="imageCacheControlFilter" regex-url-pattern=".*(\.gif|\.png|\.jpg|\.jpeg)" value="max-age=86400"/>
+ 	<web:cache-control-filter name="textCacheControlFilter" regex-url-pattern=".*(\.css|\.js)" value="max-age=1400"/>
+
+
+   <persistence:managed-persistence-context name="entityManager" auto-create="true"
+                      persistence-unit-jndi-name="@puJndiName@"/>
+
+   <drools:rule-base name="securityRules">
+      <drools:rule-files>
+         <value>/security.drl</value>
+      </drools:rule-files>
+   </drools:rule-base>
+
+   <security:rule-based-permission-resolver security-rules="#{securityRules}"/>
+
+   <security:identity authenticate-method="#{authenticator.authenticate}" remember-me="false"/>
+
+  <!--  <event type="org.jboss.seam.security.notLoggedIn">
+      <action execute="#{redirect.captureCurrentView}"/>
+   </event>
+   <event type="org.jboss.seam.security.loginSuccessful">
+      <action execute="#{redirect.returnToCapturedView}"/>
+   </event> -->
+
+ <remoting:remoting debug="false" />
+ <web:character-encoding-filter encoding="UTF-8" override-client="true" url-pattern="*.jsf"/>
+ <international:locale-selector cookie-enabled="true"/>
+ 
+ <component name="org.jboss.seam.document.documentStore">   
+  <property name="useExtensions">true</property>
+  <property name="errorPage">/error.jsf</property>
+ </component>
+  <component name="org.jboss.seam.remoting.remoting">
+ <property name="debug">false</property>
+</component>
+   <!-- For use with jBPM pageflow or process management -->
+   <!--
+   <bpm:jbpm>
+      <bpm:process-definitions></bpm:process-definitions>
+      <bpm:pageflow-definitions></bpm:pageflow-definitions>
+   </bpm:jbpm>
+   -->
+
+</components>

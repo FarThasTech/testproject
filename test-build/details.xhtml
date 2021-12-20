@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+	
+   	<h:body> 
+    	<ui:composition template = "/layout/indextemplate.xhtml">
+       		<ui:define name = "content">
+       			<h:head>
+       			
+					<script src="/resources/assets/vendor_components/bootstrap-select/dist/js/bootstrap-select.js"></script>
+					<script src="/resources/assets/vendor_plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.js"></script>
+					
+					<style type="text/css">
+	
+				   		.bootstrap-select {
+						    border: 1px solid #ddd !important;
+						    border-radius: 6px !important;
+						    width: 100% !important;
+				   		}
+				   
+					   	.form-label {
+							font-weight: 600 !important;
+						}
+					
+					</style>
+					
+       			</h:head>
+	       		<div class="content-wrapper">
+	  				<div class="container-full">
+	  					<div id="loader" />
+						<!-- Content Header (Page header) -->
+						<div class="content-header">
+							<div class="d-flex align-items-center">
+								<div class="me-auto">
+									<h3 class="page-title">#{messages.Donor}</h3>
+									<div class="d-inline-block align-items-center">
+										<nav>
+											<ol class="breadcrumb">
+												<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i></a></li>
+												<li class="breadcrumb-item" aria-current="page">#{messages.ManageDonor}</li>
+												<li class="breadcrumb-item active" aria-current="page">#{messages.DonorDetails}</li>
+											</ol>
+										</nav>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Main content -->
+						<section class="content">
+							<div class="row">			
+						  		<div class="col-md-12">
+					  				<div class="box">
+										<!-- /.box-header -->
+										<h:form class="form">
+											<div class="box-body">
+												<h4 class="box-title text-info mb-0" style="margin-left: -15px;"><i class="ti-user me-15"></i> 
+													#{messages.Personal_Details}
+												</h4>
+												<hr class="my-15" />
+												<div class="row">
+													<div class="col-md-3">
+														<div class="form-group">
+													  		<label class="form-label">#{messages.First_Name}</label>
+													  		<input type="text" class="form-control" placeholder="#{messages.First_Name}" 
+													  			value="#{donorVO.firstName}" id="userFirstName" readonly="readonly" />
+														</div>
+												  	</div>
+												  	<div class="col-md-3">
+												  		<div class="form-group">
+													  		<label class="form-label">#{messages.Last_Name}</label>
+													  		<input type="text" class="form-control" placeholder="#{messages.Last_Name}" 
+													  			value="#{donorVO.lastName}" id="userLastName" readonly="readonly" />
+														</div>
+												  	</div>
+											  		<div class="col-md-3">
+												  		<div class="form-group">
+													  		<label class="form-label">#{messages.Email}</label>
+													  		<input type="text" class="form-control" placeholder="#{messages.Email}" 
+													  			value="#{donorVO.email}" id="userEmail" readonly="readonly" />
+														</div>
+												  	</div>
+												  	<div class="col-md-2">
+														<div class="form-group">
+													  		<label class="form-label">#{messages.Telephone}</label>
+													  		<input type="text" class="form-control" placeholder="#{messages.Telephone}" 
+													  			value="#{donorVO.telephone}" name="phoneNumber" id="userTelephone" readonly="readonly" />
+														</div>
+													</div>
+													<div class="col-md-1">
+														<div class="form-group">
+													  		<label class="form-label">#{messages.Language}</label>
+													  		<select class="selectpicker" id="userLanguage" disabled="disabled">
+													  			<ui:repeat var="lang" value="#{donorVO.langList}">
+																	<option selected="#{donorVO.langid eq lang.id ? 'selected' : ''}" 
+																		value="#{lang.id}">#{lang.langCode}</option>
+																</ui:repeat>
+															</select>
+														</div>
+												  	</div>
+												</div>
+												<div class="row">
+													<div class="col-md-4">
+														<div class="form-group">
+													  		<label class="form-label">#{messages.Address} </label>
+													  		<input type="text" class="form-control" placeholder="#{messages.Address}"
+													  			value="#{donorVO.address}" id="userAddress" readonly="readonly" />
+														</div>
+												  	</div>
+												  	<div class="col-md-2">
+												  		<div class="form-group">
+													  		<label class="form-label">#{messages.House_No}</label>
+													  		<input type="text" class="form-control" placeholder="#{messages.House_No}" 
+													  			value="#{donorVO.houseNo}" id="userHouseNo" readonly="readonly" />
+														</div>
+												  	</div>
+												  	<div class="col-md-2">
+														<div class="form-group">
+													  		<label class="form-label">#{messages.City}</label>
+													  		<input type="text" class="form-control" placeholder="#{messages.City}" 
+													  			value="#{donorVO.city}"  id="userCity" readonly="readonly" />
+														</div>
+													</div>
+													<div class="col-md-2">
+														<div class="form-group">
+													  		<label class="form-label">#{messages.Country}</label>
+													  		<input type="text" class="form-control" placeholder="#{messages.Country}" 
+													  			value="#{donorVO.country}" id="userCountry" readonly="readonly" />
+														</div>
+													</div>
+													<div class="col-md-2">
+														<div class="form-group">
+													  		<label class="form-label">#{messages.PinCode}</label>
+													  		<input type="text" class="form-control" placeholder="#{messages.PinCode}" 
+													  			value="#{donorVO.zip}" id="userPinCode" readonly="readonly" />
+														</div>
+													</div>
+												</div>
+											</div>  
+										</h:form>
+									</div>
+									<div class="box">
+										<!-- /.box-header -->
+										<h:form class="form">
+											<div class="box-body">
+												<h4 class="box-title text-info mb-0" style="margin-left: -15px;"><i class="ti-user me-15"></i> 
+													#{messages.AccountDetails}
+												</h4>
+												<hr class="my-15" />
+												<ui:repeat var="userAccDet" value="#{donorVO.userAccountList}">
+													<div class="row">
+													  	<div class="col-md-4">
+															<div class="form-group">
+														  		<label class="form-label">#{messages.AcccountId}</label>
+														  		<input type="text" class="form-control" placeholder="#{messages.AcccountId}" 
+														  			value="#{userAccDet.userAccId}" id="userAccId" readonly="readonly" />
+															</div>
+													  	</div>
+													  	<div class="col-md-4">
+													  		<div class="form-group">
+														  		<label class="form-label">#{messages.Acc_Holder_Name}</label>
+														  		<input type="text" class="form-control" placeholder="#{messages.Acc_Holder_Name}" 
+														  			value="#{userAccDet.accName}" id="userAccName" readonly="readonly" />
+															</div>
+													  	</div>
+												  		<div class="col-md-4">
+													  		<div class="form-group">
+														  		<label class="form-label">#{messages.Iban}</label>
+														  		<input type="text" class="form-control" placeholder="#{messages.Iban}" 
+														  			value="#{userAccDet.iban}" id="userIban" readonly="readonly" />
+															</div>
+													  	</div>
+													</div>
+												</ui:repeat>
+											</div>  
+										</h:form>
+									</div>
+									<div class="box">
+										<!-- /.box-header -->
+										<h:form class="form">
+											<div class="box-body">
+												<h4 class="box-title text-info mb-0" style="margin-left: -15px;"><i class="ti-user me-15"></i> 
+													#{messages.DonorDetails}
+												</h4>
+												<hr class="my-15" />
+												<div class="table-responsive">
+										  			<table id="datatable_detailslist" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
+														<thead>
+															<tr>
+																<th class="col-1">#{messages.Id}</th>
+																<th class="col-2">#{messages.CampaignName}</th>
+																<th class="col-1">#{messages.Quantity}</th>
+																<th class="col-1">#{messages.Amount}</th>
+																<th class="col-1">#{messages.TotalAmount}</th>
+																<th class="col-1">#{messages.TransactionDate}</th>
+																<th class="col-2">#{messages.PaymentMethod}</th>
+																<th class="col-2">#{messages.TransactionCode}</th>
+																<th class="col-2">#{messages.PaymentStatus}</th>
+															</tr>
+														</thead>
+														<tbody>
+															<ui:repeat var="fundDet" value="#{donorVO.fundDetailsList}">
+																<tr>
+																	<td>#{fundDet.fundDetailId}</td>
+																	<td>#{fundDet.campaignName}</td>
+																	<td>#{fundDet.quantity}</td>
+																	<td>#{fundDet.amount}</td>
+																	<td>#{fundDet.totalAmount}</td>
+																	<td>#{fundDet.transactionDate}</td>
+																	<td>#{fundDet.paymentMethodName}</td>
+																	<td>#{fundDet.transactionCode}</td>
+																	<td>#{fundDet.paymentStatusName}</td>
+																</tr>
+															</ui:repeat>
+														</tbody>				  
+													</table>
+												</div> 
+											</div>  
+										</h:form>
+									</div>
+								</div>
+		  					</div>
+		  					<!-- /.row -->
+						</section>
+						<!-- /.content -->
+				  	</div>
+			  	</div>
+			  	<f:verbatim>
+					<script type="text/javascript">
+		     			//<![CDATA[
+					  		
+			  		
+			  			//]]>  
+					</script>
+				</f:verbatim>
+         	</ui:define> 
+      	</ui:composition> 
+   	</h:body> 
+</html>	

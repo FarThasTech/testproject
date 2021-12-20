@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+	
+   	<h:body> 
+    	<ui:composition template = "/layout/indextemplate.xhtml">
+       		<ui:define name = "content">
+       			<h:head>
+       			
+					<script src="/resources/assets/vendor_components/bootstrap-select/dist/js/bootstrap-select.js"></script>
+					<script src="/resources/assets/vendor_plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.js"></script>
+					
+					<style type="text/css">
+					
+						.wysihtml5-toolbar .btn-default {
+						    background-color: #ece7e7 !important;
+						}
+	
+				   		.bootstrap-select {
+						    border: 1px solid #ddd !important;
+						    border-radius: 6px !important;
+						    width: 100% !important;
+				   		}
+				   
+					   	.form-label {
+							font-weight: 600 !important;
+						}
+					
+					</style>
+					
+       			</h:head>
+	       		<div class="content-wrapper">
+	  				<div class="container-full">
+	  					<div id="loader" />
+						<!-- Content Header (Page header) -->
+						<div class="content-header">
+							<div class="d-flex align-items-center">
+								<div class="me-auto">
+									<h3 class="page-title">#{messages.Campaigns}</h3>
+									<div class="d-inline-block align-items-center">
+										<nav>
+											<ol class="breadcrumb">
+												<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i></a></li>
+												<li class="breadcrumb-item" aria-current="page">#{messages.Manage_Campaigns}</li>
+												<li class="breadcrumb-item active" aria-current="page">#{messages.Campaign}</li>
+											</ol>
+										</nav>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Main content -->
+						<section class="content">
+							<div class="row">			
+						  		<div class="col-md-12 offset-md-0">
+					  				<div class="box">
+										<!-- /.box-header -->
+										<h:form class="form">
+											<div class="box-body">
+												<h4 class="box-title text-info mb-0" style="margin-left: -15px;"><i class="ti-user me-15"></i> 
+												#{campaignVO.param eq 'update' ? messages.Update_Campaign : messages.Create_Campaign}</h4>
+												<hr class="my-15" />
+												<div class="row">
+													<div class="#{campaignVO.param eq 'update' ? 'col-md-3' : 'col-md-4'}">
+														<div class="form-group">
+													  		<label class="form-label">#{messages.Campaign_Title} <span style="color:red;">*</span></label>
+													  		<input type="text" value="#{campaignVO.campaignName}" class="form-control" placeholder="#{messages.Campaign_Title}" 
+													  			readonly="#{campaignVO.param eq 'update' ? 'readonly' : ''}" id="campaignTitle" />
+														</div>
+														<span id="titleErrorMsg" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+												  	</div>
+												  	<div class="#{campaignVO.param eq 'update' ? 'col-md-3' : 'col-md-4'}">
+														<div class="form-group">
+													  		<label class="form-label">#{messages.Monthly_Donations}</label>
+													  		<br/>
+													   		<select class="selectpicker" id="durationType" disabled="#{campaignVO.param eq 'update' ? 'disabled' : ''}">
+																<option selected="#{campaignVO.durationTypeId eq '2' ? 'selected' : ''}" value="2">#{messages.Yes}</option>
+																<option selected="#{campaignVO.durationTypeId eq '3' ? 'selected' : ''}" value="3">#{messages.No}</option>
+															</select>
+														</div>
+												  	</div>
+												  	<div class="col-md-3" style="#{campaignVO.param eq 'update' ? '' : 'display:none;'}">
+														<div class="form-group">
+													  		<label class="form-label">#{messages.Status}</label>
+													  		<br/>
+													   		<select class="selectpicker" id="status">
+																<option selected="#{campaignVO.prodGroupStatus ? 'selected' : ''}" value="true">#{messages.Enabled}</option>
+																<option selected="#{not(campaignVO.prodGroupStatus) ? 'selected' : ''}" value="false">#{messages.Disabled}</option>
+															</select>
+														</div>
+												  	</div>
+												  	<div class="#{campaignVO.param eq 'update' ? 'col-md-3' : 'col-md-4'}">
+														<div class="form-group">
+														 	<label class="form-label">#{messages.Campaign_Image} <span class="badge badge-primary-light">#{messages.Max} 1MB</span></label>
+														 	<br/>
+															<div class="btn btn-info btn-file" style="cursor: pointer;">
+															  <i class="fa fa-paperclip"></i> #{messages.Upload}
+															  <input type="file" name="attachment" style="cursor: pointer;" id="campaignImage" 
+																  data-overwrite-initial="false" data-allowed-file-extensions='["jpeg","jpg","png","gif"]' 
+																  data-show-upload="false" accept=".jpeg, .jpg, .png, .gif" />
+															</div> &nsbp;
+															<img src="#{campaignVO.imageUrl}" id="updatedImage" class="img-fluid max-w-100" 
+																style="#{campaignVO.imageUrl ne null and campaignVO.imageUrl != '' ? '' :'display:none;'}"/>
+													  	</div>
+													</div>
+												</div>
+												
+												<div class="row">
+													<div class="col-md-4">
+														<div class="form-group">
+													  		<label class="form-label">#{messages.Amount} <span style="color:red;">*</span></label>
+													 		<div class="input-group">
+																<span class="input-group-addon" style="display: ${currencyCode ne 'EUR' ? 'block;' : 'none;'}">${currencySymbol}</span>
+																<input type="text" value="#{campaignVO.amountStr}" class="form-control" placeholder="#{messages.Amount}" id="amount" name="validateAmt" 
+																	onchange="this.value = validateAmount(this.value);updateProposedAmt(this.value);" />
+																<span class="input-group-addon" style="display: ${currencyCode eq 'EUR' ? 'block;' : 'none;'}">${currencySymbol}</span>
+													  		</div>
+													  		<span id="amtErrorMsg" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+														</div>
+											  		</div>
+												  	<div class="col-md-4">
+														<div class="form-group">
+															<label class="form-label">#{messages.Amount_To_Raise} </label>
+														  	<div class="input-group">
+																<span class="input-group-addon" style="display: ${currencyCode ne 'EUR' ? 'block;' : 'none;'}">${currencySymbol}</span>
+																<input type="text" value="#{campaignVO.targetAmountStr}" class="form-control" placeholder="#{messages.Amount_To_Raise}" id="targetAmt" 
+																	name="validateAmt" onchange="this.value = validateAmount(this.value);" />
+																<span class="input-group-addon" style="display: ${currencyCode eq 'EUR' ? 'block;' : 'none;'}">${currencySymbol}</span>
+														  	</div>
+														</div>
+												  	</div>
+												  	<div class="col-md-4">
+														<div class="form-group">
+													  		<label class="form-label">#{messages.Amount_Of_External_Donations} </label>
+													 		<div class="input-group">
+																<span class="input-group-addon" style="display: ${currencyCode ne 'EUR' ? 'block;' : 'none;'}">${currencySymbol}</span>
+																<input type="text" value="#{campaignVO.collectedAmountStr}" class="form-control" 
+																	placeholder="#{messages.Amount_Of_External_Donations}" id="collectedAmt" name="validateAmt" 
+																	readonly="#{campaignVO.param eq 'update' ? 'readonly' : ''}" onchange="this.value = validateAmount(this.value);" />
+																<span class="input-group-addon" style="display: ${currencyCode eq 'EUR' ? 'block;' : 'none;'}">${currencySymbol}</span>
+													  		</div>
+														</div>
+											  		</div>
+												</div>
+												
+												<div class="row">
+													<label class="form-label">#{messages.Proposed_Amounts} </label>
+											 		<div class="col-md-3">
+														<div class="form-group">
+												  			<div class="input-group">
+																<span class="input-group-addon" style="display: ${currencyCode ne 'EUR' ? 'block;' : 'none;'}">${currencySymbol}</span>
+																<input type="text" value="#{campaignVO.firstAmountStr}" class="form-control" placeholder="" id="firstAmt" name="validateAmt" onchange="this.value = validateAmount(this.value);" />
+																<span class="input-group-addon" style="display: ${currencyCode eq 'EUR' ? 'block;' : 'none;'}">${currencySymbol}</span>
+												  			</div>
+														</div>
+											  		</div>
+											  		<div class="col-md-3">
+														<div class="form-group">
+												  			<div class="input-group">
+																<span class="input-group-addon" style="display: ${currencyCode ne 'EUR' ? 'block;' : 'none;'}">${currencySymbol}</span>
+																<input type="text" value="#{campaignVO.secondAmountStr}" class="form-control" placeholder="" id="secondAmt" name="validateAmt" onchange="this.value = validateAmount(this.value);" />
+																<span class="input-group-addon" style="display: ${currencyCode eq 'EUR' ? 'block;' : 'none;'}">${currencySymbol}</span>
+												  			</div>
+														</div>
+											  		</div>
+											  		<div class="col-md-3">
+														<div class="form-group">
+												  			<div class="input-group">
+																<span class="input-group-addon" style="display: ${currencyCode ne 'EUR' ? 'block;' : 'none;'}">${currencySymbol}</span>
+																<input type="text" value="#{campaignVO.thirdAmountStr}" class="form-control" placeholder="" id="thirdAmt" name="validateAmt" onchange="this.value = validateAmount(this.value);" />
+																<span class="input-group-addon" style="display: ${currencyCode eq 'EUR' ? 'block;' : 'none;'}">${currencySymbol}</span>
+												  			</div>
+														</div>
+											  		</div>
+											  		<div class="col-md-3">
+														<div class="form-group">
+												  			<div class="input-group">
+																<span class="input-group-addon" style="display: ${currencyCode ne 'EUR' ? 'block;' : 'none;'}">${currencySymbol}</span>
+																<input type="text" value="#{campaignVO.fourthAmountStr}" class="form-control" placeholder="" id="fourthAmt" name="validateAmt" onchange="this.value = validateAmount(this.value);" />
+																<span class="input-group-addon" style="display: ${currencyCode eq 'EUR' ? 'block;' : 'none;'}">${currencySymbol}</span>
+												  			</div>
+														</div>
+											  		</div>
+											 	</div>
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group">
+												 			<label class="form-label">#{messages.Description}</label>
+											 				<br/>
+															<textarea class="textarea" id="description" placeholder="#{messages.Description_About_Campaign}" 
+														  		style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" >
+														  		#{campaignVO.description}
+														  	</textarea>
+											  			</div>
+											  		</div>
+										  		</div>
+											  	<div class="box-footer text-end ltrrtl-float">
+											  		<a href="campaignlist.jsf" class="btn btn-danger">
+												  		<i class="fa fa-remove"></i> #{messages.Cancel}
+													</a>
+													<button type="button" onclick="saveCampaign('#{campaignVO.param}');" class="btn btn-primary">
+												  		<i class="fa fa-save"></i> #{campaignVO.param eq 'update' ? messages.Update : messages.Save } 
+													</button>
+												</div>
+											</div>  
+											<input type="hidden" id="campaignImageName" />
+											<input type="hidden" id="campaignImageSource" />
+											<input type="hidden" id="prodGroupId" value="#{campaignVO.prodGroupIdStr}" />
+											<input type="hidden" id="File_Size_Validation" value="#{messages.File_Size_Validation}" />
+											<input type="hidden" id="Type_Mismatched" value="#{messages.Type_Mismatched}" />
+										</h:form>
+									</div>
+								</div>
+		  					</div>
+		  					<!-- /.row -->
+						</section>
+						<!-- /.content -->
+				  	</div>
+			  	</div>
+			  	<f:verbatim>
+					<script type="text/javascript">
+		     			//<![CDATA[
+					  		$('#description').wysihtml5();	
+					  		
+					  		$('input[name="validateAmt"]').on('input', function(){
+								var val  = $(this).val().replace(/[^0-9.]/g,'');
+								$(this).val(val);
+							});
+					  		
+					  		function validateAmount(value){
+								if(value.length == 0){
+					    			value = 1;
+						    		return value;
+						   		}else{ 
+						    		value = value.replace(',','.');
+						    	 	value = value.replace(/[^+0-9\.]/, '');
+						    		value = parseFloat(value).toFixed(2);
+						 		}
+						    	if(value.length == 0 || isNaN(value)){
+						    		value = 1;
+						   		}
+					   			return value;
+						    }
+					  		
+					  		function updateProposedAmt(value){
+								var val = validateAmount(value);
+								if(!isNaN(val)){
+									$('#firstAmt').val(validateAmount((value).toString()));
+							  		$('#secondAmt').val(validateAmount((value * 3).toString()));
+							  		$('#thirdAmt').val(validateAmount((value * 5).toString()));
+							  		$('#fourthAmt').val(validateAmount((value * 10).toString()));
+							  		$('#targetAmt').val(validateAmount((value * 100).toString()));
+								}
+					  		}
+					  		
+					  		$('#campaignImage').on("change", campaignImage);
+					  		
+					  		function campaignImage() {
+					  			if(this.files){
+							  		$.each(this.files, readAndUpload);
+						  		  	function readAndUpload(i, file) {
+							  		    if(file.size > 1000000){
+							  		    	swal($("#File_Size_Validation").val() + " 1MB");
+							  		      	return '';
+							  			}
+							  		 	if (!/\.(jpe?g|png|gif)$/i.test(file.name)){
+							  		 		swal($("#Type_Mismatched").val());
+							  	      		return '';
+							  	    	}
+							  		    var reader = new FileReader();
+							  		    $(reader).on("load", function() {
+					  		    	 		$('#campaignImageName').val(file.name);
+					  		    	 		$('#campaignImageSource').val(this.result);
+					  		    	 		$('#updatedImage').attr('style', "");
+					  		    	 		$('#updatedImage').attr('src', this.result);
+							  			});
+						  				reader.readAsDataURL(file);
+						  			}
+					  			}
+					  		}
+					  	
+					  		function saveCampaign(param){
+					  			$("#titleErrorMsg").attr("style","display:none;");
+								$("#amtErrorMsg").attr("style","display:none;");
+					  			var campaignTitle = $('#campaignTitle').val();
+					  			var durationType = $('#durationType').val();
+					  			var description = $('#description').val();
+					  			var campaignImageSource = $('#campaignImageSource').val();
+					  			var campaignImageName = $('#campaignImageName').val();
+					  			var amount = $("#amount").val();
+					  			var collectedAmt = $('#collectedAmt').val();
+					  			var targetAmt = $('#targetAmt').val();
+					  			var firstAmt = $('#firstAmt').val();
+					  			var secondAmt = $('#secondAmt').val();
+					  			var thirdAmt = $('#thirdAmt').val();
+					  			var fourthAmt = $('#fourthAmt').val();
+					  			var prodGroupId = $('#prodGroupId').val();
+					  			var status = $('#status').val();
+					  			if(campaignTitle != null && campaignTitle.trim().length > 0 && amount != null && amount.trim().length > 0){
+					  				blockUI();
+						  			$.ajax({
+							    		type: 'post',
+							    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:campaignBean.execute()',
+							    		data: { param: param,
+								    			campaignTitle: campaignTitle,
+								    			durationType: durationType,
+								    			description: description,
+								    			campaignImageSource: campaignImageSource,
+								    			campaignImageName: campaignImageName,
+								    			amount: amount,
+								    			collectedAmt: collectedAmt,
+								    			targetAmt: targetAmt,
+								    			firstAmt: firstAmt,
+								    			secondAmt: secondAmt,
+								    			thirdAmt: thirdAmt,
+								    			fourthAmt: fourthAmt,
+								    			prodGroupId: prodGroupId,
+								    			status: status
+							    			},
+						    			success: function(res) {
+						    				window.location = "campaignlist.jsf";
+							  	       	}
+							    	});
+					  			}else{
+					  				if(campaignTitle == null || (campaignTitle != null && campaignTitle.trim().length == 0 )){
+					  					$("#titleErrorMsg").attr("style","display:block;color:red;"); 			  					
+					  				}
+									if(amount == null || (amount != null && amount.trim().length == 0 )){
+										$("#amtErrorMsg").attr("style","display:block;color:red;");
+					  				}
+					  			}
+					  		}
+			  		
+			  			//]]>  
+					</script>
+				</f:verbatim>
+         	</ui:define> 
+      	</ui:composition> 
+   	</h:body> 
+</html>	

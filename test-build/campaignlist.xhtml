@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+   	<h:body> 
+    	<ui:composition template = "/layout/indextemplate.xhtml">
+       		<ui:define name = "content">
+	       		<h:head>
+					<script src="/resources/assets/js/datatables/datatable_campaignlist.js"></script>
+					<style>
+
+						table.dataTable {
+							border-collapse: collapse !important;;
+						}
+						
+						.dataTables_info, .dataTables_length, .dt-buttons {
+						    display: inline-block !important;
+						}
+						
+						.dt-buttons {
+						    float: right;
+						}
+						
+						.fa {
+    						font-size: large;
+						}
+						
+						.theme-primary .dt-buttons .dt-button {
+ 		   					background-color: #f00;
+						}
+						
+						.dropdown-item.active, .dropdown-item:active {
+						    background-color: #0052cc !important;
+						}
+						
+						.fa-info:hover {
+						    color: #5992e7 !important;
+						}
+						
+						.fa-external-link:hover {
+						    color: #5992e7 !important;
+						}
+						
+						.dropdown-item.active, .dropdown-item:active {
+						    background-color:  blue !important;
+						    color: #fff !important;
+						}
+						
+						.dt-button-collection a:hover {
+						    color: #fff !important;
+						}
+
+						.dt-button-collection {
+							left: 0px !important;
+							max-height: 300px !important;
+							overflow-y: scroll;
+							overflow-x: hidden;
+						}
+						
+					</style>
+				</h:head>
+				<div class="content-wrapper">
+	  				<div class="container-full">
+	  					<div id="loader" />
+						<!-- Content Header (Page header) -->
+						<div class="content-header">
+							<div class="d-flex align-items-center">
+								<div class="me-auto">
+									<h3 class="page-title">#{messages.Campaigns}</h3>
+									<div class="d-inline-block align-items-center">
+										<nav>
+											<ol class="breadcrumb">
+												<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i></a></li>
+												<li class="breadcrumb-item" aria-current="page">#{messages.Manage_Campaigns}</li>
+												<li class="breadcrumb-item active" aria-current="page">#{messages.Campaign_List}</li>
+											</ol>
+										</nav>
+									</div>
+								</div>
+								<a href="campaign.jsf" class="waves-effect waves-light btn btn-primary ltrrtl-float">
+                                   	<i class="fa fa-plus" />
+                                </a>
+							</div>
+						</div>
+
+						<!-- Main content -->
+						<section class="content">
+		  					<div class="row">
+								<div class="col-12">
+			  						<div class="box">
+										<!-- /.box-header -->
+										<div class="box-body">
+											<div>
+									  			<table id="datatable_campaignlist" class="table table-hover display nowrap margin-top-10 w-p100">
+													<thead>
+														<tr>
+															<th class="col-2">#{messages.Campaign_Image}</th>
+															<th class="col-1">#{messages.CampaignCategory}</th>
+															<th class="col-1">#{messages.Campaign_Title}</th>
+															<th class="col-2">#{messages.Amount}</th>
+															<th class="col-2">#{messages.Target_Amount}</th>
+															<th class="col-2">#{messages.Description}</th>
+															<th class="col-2">#{messages.Status}</th>		<!--column: 6 - added in below script -->  
+															<th class="col-2">#{messages.MoreInfo}</th>
+														</tr>
+													</thead>
+													<tbody>
+														
+													</tbody>				  
+												</table>
+											</div>              
+										</div>
+							  		</div>
+								</div>
+						  	</div>
+						</section> 
+						<input type="hidden" id="Are_you_sure" value="#{messages.Are_You_Sure}" />
+						<input type="hidden" id="You_Want_To_Disable_Campaign" value="#{messages.You_Want_To_Disable_Campaign}" /> 
+						<input type="hidden" id="Campaign_Successfully_Disabled" value="#{messages.Campaign_Successfully_Disabled}" /> 
+						<input type="hidden" id="You_Want_To_Enable_Campaign" value="#{messages.You_Want_To_Enable_Campaign}" /> 
+						<input type="hidden" id="Campaign_Successfully_Enabled" value="#{messages.Campaign_Successfully_Enabled}" /> 
+						<input type="hidden" id="Done_Msg" value="#{messages.Done}" /> 
+						<input type="hidden" id="Cancelled" value="#{messages.Cancelled}" /> 
+						<input type="hidden" id="You_Want_To_Delete_Campaign" value="#{messages.You_Want_To_Delete_Campaign}" />  
+						<input type="hidden" id="Campaign_Deleted_Successfully" value="#{messages.Campaign_Deleted_Successfully}" />
+						<input type="hidden" id="Campaign_Is_Safe" value="#{messages.Campaign_Is_Safe}" />
+						
+				  	</div>
+			  	</div>
+			  	<f:verbatim>
+					<script type="text/javascript">
+		     			//<![CDATA[
+		     				var table;
+		     				
+					  		function showDescription(description){
+					  			alert(description);
+					  		}
+					  		
+					  		function updateStatus(val, index, prodGroupId){
+					  			
+					  			var questionMsg =  $("#You_Want_To_Enable_Campaign").val();
+					  			if(val == "Enabled"){
+					  				questionMsg =  $("#You_Want_To_Disable_Campaign").val();
+					  			}
+					  			 
+						  		swal({
+						            title: $("#Are_you_sure").val(),
+						            text: questionMsg,
+						            type: "success",
+						            showCancelButton: true,
+						            confirmButtonColor: "#EF5350",
+						            confirmButtonText: $("#YesMsg").val(),
+						            cancelButtonText: $("#NoMsg").val(),
+						            closeOnConfirm: false,
+						            closeOnCancel: false
+						        },
+						        function(isConfirm){
+						            if (isConfirm) {
+						            	var badge = "badge-success";
+						            	var status = "true";
+						            	var valStr = $("#EnabledMsg").val();
+						            	var successMsg = $("#Campaign_Successfully_Enabled").val();
+						            	if(val == "Enabled"){
+						  					val = "Disabled";
+						  					valStr = $("#DisabledMsg").val();
+						  					successMsg = $("#Campaign_Successfully_Disabled").val();
+						  					badge = "badge-danger";
+						  					status = "false";
+							  			}else{
+							  				val = "Enabled";
+							  			}
+						            	updateProdGroupStatus(status, prodGroupId);
+						            	var status = "<a href=\"#\" onclick=\"updateStatus('"+val+"','" + index + "','" + prodGroupId + "');\" ><span class=\"badge "+badge+"\">"+valStr+"</span></a>";
+						            	table.cell({row:index, column:6}).data(status).draw();
+					            		swal({
+						                    title: $("#Done_Msg").val(),
+						                    text: successMsg,
+						                    showConfirmButton: false,
+						                    timer: 1000,
+						                    type: "success"
+						                });
+						            } else {
+						                swal({
+						                    title: $("#Cancelled").val(),
+						                    text: $("#Campaign_Is_Safe").val(),
+						                    showConfirmButton: false,
+						                    timer: 1000,
+						                    type: "error"
+					                	});
+						            }
+						        });
+					  		}
+					  		
+					  		function deleteProductGroup(prodGroupId){
+						  		swal({
+						            title: $("#Are_you_sure").val(),
+						            text: $("#You_Want_To_Delete_Campaign").val(),
+						            type: "success",
+						            showCancelButton: true,
+						            confirmButtonColor: "#EF5350",
+						            confirmButtonText: $("#YesMsg").val(),
+						            cancelButtonText: $("#NoMsg").val(),
+						            closeOnConfirm: false,
+						            closeOnCancel: false
+						        },
+						        function(isConfirm){
+						            if (isConfirm) {
+						            	deleteProdGroup(prodGroupId);
+					            		swal({
+						                    title: $("#Done_Msg").val(),
+						                    text: $("#Campaign_Deleted_Successfully").val(),
+						                    showConfirmButton: false,
+						                    timer: 1000,
+						                    type: "success"
+						                });
+						            } else {
+						                swal({
+						                    title: $("#Cancelled").val(),
+						                    text: $("#Campaign_Is_Safe").val(),
+						                    showConfirmButton: false,
+						                    timer: 1000,
+						                    type: "error"
+					                	});
+						            }
+						        });
+					  		}
+					  		
+					  		function deleteProdGroup(prodGroupId){
+					  			$.ajax({
+						    		type: 'post',
+						    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:campaignBean.deleteProdGroup()',
+						    		data: {	prodGroupId: prodGroupId },
+					    			success: function() {
+					    				window.location = "campaignlist.jsf";
+					    			}
+						    	});
+					  		}
+					  		
+					  		function updateProdGroupStatus(status, prodGroupId){
+					  			$.ajax({
+						    		type: 'post',
+						    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:campaignBean.updateProdGroupStatus()',
+						    		data: {	status: status,
+							    			prodGroupId: prodGroupId
+						    			},
+					    			success: function() {}
+						    	});
+					  		}
+					  		
+			  			//]]>  
+					</script>
+				</f:verbatim>
+        	</ui:define> 
+      	</ui:composition> 
+   	</h:body> 
+</html>	

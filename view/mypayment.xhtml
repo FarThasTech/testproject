@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+	
+   	<h:body> 
+    	<ui:composition template = "/layout/indextemplate.xhtml">
+       		<ui:define name = "content">
+       			<h:head>
+       			
+					<style type="text/css">
+	
+						.box-inverse {
+						    color: #ffffff !important;
+						    background-color: #789fe1 !important;
+						}
+						
+						
+						@media screen and (min-width: 768px) and (max-width: 875px) {
+							.col-lg-3 {
+							    flex: 0 0 auto;
+							    width: 100% !important;
+							}
+						}
+						
+						@media screen and (min-width: 876px) and (max-width: 1200px) {
+							.col-lg-3 {
+							    flex: 0 0 auto;
+							    width: 50% !important;
+							}
+						}
+						
+						@media screen and (min-width: 1201px) and (max-width: 1450px) {
+							.col-lg-3 {
+							    flex: 0 0 auto;
+							    width: 33.33% !important;
+							}
+						}
+						
+						@media screen and (min-width: 320px) and (max-width: 598px) {
+							.col-6 {
+							    flex: 0 0 auto;
+							    width: 100% !important;
+							}
+						}
+						
+					</style>
+					
+       			</h:head>
+	       		<div class="content-wrapper">
+	  				<div class="container-full">
+	  					<div id="loader" />
+						<!-- Content Header (Page header) -->
+						<div class="content-header">
+							<div class="d-flex align-items-center">
+								<div class="me-auto">
+									<h3 class="page-title">#{messages.Payment_Gateway}</h3>
+									<div class="d-inline-block align-items-center">
+										<nav>
+											<ol class="breadcrumb">
+												<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i></a></li>
+												<li class="breadcrumb-item" aria-current="page">#{messages.Manage_Payment}</li>
+												<li class="breadcrumb-item active" aria-current="page">#{messages.My_Payment}</li>
+											</ol>
+										</nav>
+									</div>
+								</div>
+								<a href="#" class="waves-effect waves-light btn btn-warning ltrrtl-float" style="margin-right: 10px;">
+                                   	#{messages.Online} : #{messages.Online_Pay_Info_Msg}
+                                </a> 
+                                <a href="#" class="waves-effect waves-light btn btn-danger ltrrtl-float">
+                                   	#{messages.Offline} : #{messages.Offline_Pay_Info_Msg}
+                                </a>
+							</div>
+						</div>
+						
+						<!-- Main content -->
+						<section class="content">
+							<div class="row">			
+						  		<div class="col-md-12 offset-md-0">
+					  				<div class="box">
+										<!-- /.box-header -->
+										<h:form class="form">
+											<div class="box-body">
+												<c:set scope="request" value="#{payMethodBean.getPaymentInformation()}" var="payMethodListVar"/>
+												<c:forEach items="#{payMethodListVar}" var="map" varStatus="status">
+													<hr class="my-10" style="display:  #{status.index eq 0 ? 'none;' : 'block;'}" />
+														<h4 class="box-title text-info mb-0" style="margin-left: -15px;"><i class="ti-user me-15"></i>
+															<ui:repeat var="mainMap" value="#{map.key}"> 
+																#{mainMap.payMethodName}
+																<h:panelGroup rendered="#{!mainMap.accountConnected and mainMap.payMethodName eq 'Stripe'}">
+																	<button type="button" class="btn btn-primary" value="connect" onclick="stripeConnect();" >#{messages.Connect}</button>
+																</h:panelGroup> 
+															</ui:repeat>
+														</h4>
+													<hr class="my-15" />
+													<div class="row">
+														<ui:repeat var="payMethod" value="#{map.value}">
+															<h:panelGroup rendered="#{payMethod.showKeys}">
+																<div class="col-md-4">
+																	<div class="form-group">
+																  		<label class="form-label">#{messages.AcccountId} <span style="color:red;">*</span></label>
+																 		<div class="input-group">
+																			<input type="text" value="#{payMethod.accountId}" class="form-control" readonly="readonly" />
+																  		</div>
+																	</div>
+														  		</div>
+														  		<div class="col-md-4">
+																	<div class="form-group">
+																  		<label class="form-label">#{messages.Secret_Key} <span style="color:red;">*</span></label>
+																 		<div class="input-group">
+																			<input type="text" value="#{payMethod.paymentKey1}" class="form-control" readonly="readonly" />
+																  		</div>
+																	</div>
+														  		</div>
+														  		<div class="col-md-4">
+																	<div class="form-group">
+																  		<label class="form-label">#{messages.Publishable_Key} <span style="color:red;">*</span></label>
+																 		<div class="input-group">
+																			<input type="text" value="#{payMethod.paymentKey2}" class="form-control" readonly="readonly" />
+																  		</div>
+																	</div>
+														  		</div>
+													  		</h:panelGroup>
+															<div class="col-lg-3 col-md-6 col-6">
+																<div class="box pull-up" style="background-color: lightblue;">
+																	<div class="box-body d-flex align-items-center">
+																		<img src="/resources/assets/images/dbox/#{payMethod.paymentTypeName}.png" alt="" class="align-self-end h-70 w-70" />
+																		<div class="d-flex flex-column flex-grow-1" style="margin-left: 50px;margin-top: 0px;">
+																			<div style="text-align: left;">
+																				<input type="checkbox" id="md_checkbox_enable_#{payMethod.paymentTypeName}" 
+																					onclick="updatePaymentMethodDetails('Enable', '#{payMethod.payMethodId}', this);"
+																					class="filled-in chk-col-success" checked="#{payMethod.enable ? 'checked' : ''}" />
+																				<label for="md_checkbox_enable_#{payMethod.paymentTypeName}">#{messages.Enable}</label> <br />
+																			</div>
+																			<div style="text-align: left;">
+																				<input type="checkbox" id="md_checkbox_online_#{payMethod.paymentTypeName}" 
+																					onclick="updatePaymentMethodDetails('Online', '#{payMethod.payMethodId}', this);"
+																					class="filled-in chk-col-warning" checked="#{payMethod.online ? 'checked' : ''}" />
+																				<label for="md_checkbox_online_#{payMethod.paymentTypeName}">#{messages.Online}</label>	<br />
+																			</div>
+																			<div style="text-align: left;">
+																				<input type="checkbox" id="md_checkbox_offline_#{payMethod.paymentTypeName}" 
+																					onclick="updatePaymentMethodDetails('Offline', '#{payMethod.payMethodId}', this);"
+																					class="filled-in chk-col-danger" checked="#{payMethod.offline ? 'checked' : ''}" />
+																				<label for="md_checkbox_offline_#{payMethod.paymentTypeName}">#{messages.Offline}</label> <br />
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</ui:repeat>
+													</div>
+												</c:forEach>
+											</div>
+										</h:form>
+									</div>
+								</div>
+		  					</div>
+		  					<!-- /.row -->
+						</section>
+						<!-- /.content -->
+				  	</div>
+			  	</div>
+			  	<f:verbatim>
+					<script type="text/javascript">
+		     			//<![CDATA[
+		     				
+		     				function stripeConnect(){
+		     					blockUI();
+				  				$.ajax({
+						    		type: 'post',
+						    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:stripeBean.stripeAccountCreationUrl()',
+						    		data: { param: true },
+					    			success: function(res) {
+					    				var result = res.split('\n', 1);
+					    				window.location = result;
+						  	       	}
+						    	});
+				  			}
+		     				
+		     				function updatePaymentMethodDetails(param, payMethodId, value){
+		     					var status = $(value).is(':checked');
+		     					$.ajax({
+						    		type: 'post',
+						    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:payMethodBean.updatePaymentMethodDetails()',
+						    		data: { param: param,
+						    				payMethodId: payMethodId,
+						    				status: status
+						    			},
+					    			success: function(res) {
+					    				
+						  	       	}
+						    	});
+		     				}
+					  		
+			  			//]]>  
+					</script>
+				</f:verbatim>
+         	</ui:define> 
+      	</ui:composition> 
+   	</h:body> 
+</html>	

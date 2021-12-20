@@ -1,0 +1,151 @@
+ .bootstrap-select {
+	border: 1px solid #ddd !important;
+	border-radius: 6px !important;
+	width: 100% !important;
+}
+   
+.form-label {
+	font-weight: 600 !important;
+}
+	
+.bg-primary-light {
+    background-color: #e1eaf9 !important;
+    color: #0052cc !important;
+}
+	
+.nav-pills > li > a {
+    border: 1px solid #adb8c1 !important;
+}
+
+.tabwidth{
+	width: 20% !important;
+}
+
+.tabwidthAmt{
+	width: 15% !important;
+}
+ 
+.inputwidth{
+	width: 30% !important;
+}
+ 
+.recurringwidth{
+	width: 30% !important;
+}
+ 
+.offset-md-2 {
+	margin-left: 13.667% !important;
+}
+	
+.box-body ul li {
+	line-height: 33px !important;
+}
+	
+@media screen and (min-width: 1000px) and (max-width: 1500px) {
+	.col-md-7 {
+		flex: 0 0 auto;
+		width: 80% !important;
+	}
+	.offset-md-2 {
+	    margin-left: -0.333% !important;
+	}
+}
+	
+@media screen and (min-width: 768px) and (max-width: 999px) {
+	.col-md-7 {
+	    width: 100% !important;
+	}
+	.offset-md-2 {
+	    margin-left: -0.333% !important;
+	}
+	.content-wrapper {
+	    margin-left: 0px !important; 
+    }
+}
+	
+@media screen and (min-width: 280px) and (max-width: 767px) {
+	.offset-md-2 {
+	    margin-left: 0px !important;
+	}
+	.tabwidth{
+		width: 50% !important;
+ 	}
+ 	.tabwidthAmt{
+ 		width: 50% !important;
+ 	}
+	.inputwidth{
+		width: 100% !important;
+ 	}	 
+ 	.recurringwidth{
+		width: 50% !important;
+ 	}
+ 	.w-p15 {
+    	width: 50% !important;
+	}
+}
+	
+@media screen and (min-width: 991px) and (max-width: 1100px) {
+	.col-md-10 {
+	    width: 100% !important;
+	}
+	.offset-md-1 {
+	    margin-left: 0px !important;
+	}
+}
+	
+.btn-lg {
+    font-size: 2.25rem !important;
+}
+	    
+.nav-pills .paytab.active, .nav-pills .show > .paytab {
+   	color: #fff;
+   	background-color: #cfe0f9;
+	border: 2px solid #0052cc !important;
+/*     background-color: antiquewhite !important; */
+/*     border: 2px solid #bd3333 !important; */
+}  
+
+.btn-lg {
+	font-size: 1.75rem !important;
+}
+
+.stripefield{
+	background: white;
+	box-sizing: border-box;
+	font-weight: 400;
+	border: 2px solid #0052cc !important;
+	border-radius: 5px !important;
+	color: #32315E;
+	outline: none;
+	height: 48px;
+	line-height: 48px;
+	padding: 0 20px;
+	cursor: text;
+}
+			
+.errorStripe.visibleStripe {
+  	display: inline;
+}
+
+.errorStripe {
+  	display: none;
+  	font-size: 13px;
+  	color: #E4584C;
+}
+
+.progress {
+    height: 1.5rem !important;
+    font-size: 1.5rem !important;
+    border-radius: 1rem !important;
+    font-weight: 600 !important;
+}
+
+.progress .progress-bar {
+    border-radius: 10px !important;
+}
+
+.progress-border-style{
+	border: 2px solid #0052cc;
+	padding: 5px;
+	border-radius: 15px;
+}

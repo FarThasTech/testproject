@@ -1,0 +1,546 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+	
+   	<h:body> 
+    	<ui:composition template = "/layout/indextemplate.xhtml">
+       		<ui:define name = "content">
+       			<h:head>
+       			
+					<script src="/resources/assets/vendor_components/bootstrap-select/dist/js/bootstrap-select.js"></script>
+					<script src="/resources/assets/js/datatables/datatable_category.js"></script>
+					<style>
+
+						table.dataTable {
+							border-collapse: collapse !important;;
+						}
+						
+						.dataTables_info, .dataTables_length, .dt-buttons {
+						    display: inline-block !important;
+						}
+						
+						.dt-buttons {
+						    float: right;
+						}
+						
+						.fa {
+    						font-size: large;
+						}
+						
+						.theme-primary .dt-buttons .dt-button {
+ 		   					background-color: #f00;
+						}
+						
+						.dropdown-item.active, .dropdown-item:active {
+						    background-color: #0052cc !important;
+						}
+						
+						.fa-info-circle:hover {
+						    color: #5992e7 !important;
+						}
+						
+						.fa-edit:hover {
+						    color: #5992e7 !important;
+						}
+						
+						.fa-plus-circle:hover {
+						    color: #5992e7 !important;
+						}
+						
+						.bootstrap-select {
+						    border: 1px solid #ddd !important;
+						    border-radius: 6px !important;
+						    width: 100% !important;
+				   		}
+				   		
+				   		.modal-content {
+						    border-radius: 1.5rem !important;
+						}
+					</style>
+					
+       			</h:head>
+	       		<div class="content-wrapper">
+	  				<div class="container-full">
+	  					<div id="loader" />
+						<!-- Content Header (Page header) -->
+						<div class="content-header">
+							<div class="d-flex align-items-center">
+								<div class="me-auto">
+									<h3 class="page-title">#{messages.Category}</h3>
+									<div class="d-inline-block align-items-center">
+										<nav>
+											<ol class="breadcrumb">
+												<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i></a></li>
+												<li class="breadcrumb-item" aria-current="page">#{messages.Manage_Campaign}</li>
+												<li class="breadcrumb-item active" aria-current="page">#{messages.CampaignCategory}</li>
+											</ol>
+										</nav>
+									</div>
+								</div>
+								<a href="#" class="waves-effect waves-light btn btn-primary ltrrtl-float" data-bs-toggle="modal" data-bs-target="#createNewCategory" onclick="addNewCategory();">
+                                   	<i class="fa fa-plus" />
+                                </a>
+							</div>
+						</div>
+						
+						<!-- Main content -->
+						<section class="content">
+							<div class="row">			
+						  		<div class="col-md-12 offset-md-0">
+					  				<div class="box">
+										<!-- /.box-header -->
+										<h:form class="form">
+											<div class="box-body">
+												<div>
+										  			<table id="datatable_category" class="table table-hover display nowrap margin-top-10 w-p100">
+														<thead>
+															<tr>
+																<th class="col-2">#{messages.CategoryName}</th>
+																<th class="col-3">#{messages.Description}</th>
+																<th class="col-3">#{messages.StartDate} </th>
+												  				<th class="col-2">#{messages.EndDate}</th>
+																<th class="col-2">#{messages.Status}</th>
+																<th class="col-2">#{messages.MoreInfo}</th> 
+															</tr>
+														</thead>
+														<tbody>
+															<ui:repeat var="category" value="#{categoryVO.categoryList}" varStatus="status">
+																<tr>
+																	<td>#{category.categoryName}</td>
+																	<td>#{category.description}</td>
+																	<td>#{category.startDate}</td>
+																	<td>#{category.endDate}</td>
+																	<td>
+																		<a href="#" onclick="updateStatus('#{category.enable}', '#{status.index}', '#{category.categoryId}');" >
+																			<span class="badge #{category.enable ? 'badge-success' : 'badge-danger'}">
+																				#{category.enable ? messages.Active : messages.InActive}
+																			</span>
+																		</a>
+																	</td>
+																	 <td>
+																	 	<a href="#" data-bs-toggle="modal" data-bs-target="#createNewCategory" onclick="editCategory('#{category.categoryLangId}');">
+																	 		<i class="fa fa-edit" ></i>
+																	 	</a>
+																	 	<a href="#" onclick="deleteCategory('#{category.categoryId}');" ><i class="fa fa-trash-o" style="color:red;"></i></a>
+																	 </td>
+																</tr>
+															</ui:repeat>
+														</tbody>				  
+													</table>
+												</div>  
+												<div id="createNewCategory" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+													<div class="modal-dialog">
+														<div class="modal-content">
+															<div class="modal-header">
+																<h4 class="modal-title" id="myLargeModalLabel">#{messages.Team_Creation}</h4>
+																<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+															</div>
+															<div class="modal-body" id="refreshPopup">
+																<div class="row">
+																	<div class="col-md-12">
+																		<div class="form-group">
+																	  		<label class="form-label">#{messages.CategoryName}</label>
+																	  		<input type="text" class="form-control" placeholder="#{messages.CategoryName}" id="categoryName" />
+																	  		<span id="categoryNameMsg" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+																	  		<span id="categoryNameValidate" style="display: none;">#{messages.Exist}</span>
+																		</div>
+																  	</div>
+																  	<div class="col-md-12">
+																  		<div class="form-group">
+																	  		<label class="form-label">#{messages.Description}</label>
+																	  		<textarea class="form-control" placeholder="#{messages.Description}" id="categoryDesc" />
+																	  		<span id="categoryDescMsg" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+																		</div>
+																  	</div>
+																  	<div class="col-md-12">
+																  		<div class="form-group">
+																	  		<label class="form-label">#{messages.StartDate} 
+																	  			<a href="#" title="#{messages.StartDate}" >
+																	  				<i class="fa fa-info-circle" />
+																	  			</a>
+																	  		</label>
+																	  		<input type="text" class="form-control" placeholder="#{messages.StartDate}" id="categoryStartDate" />
+																	  		<span id="categoryStartDateMsg" style="display: none;">#{messages.Valid_Start_Date_Msg}</span>
+																		</div>
+																  	</div>
+																  	<div class="col-md-12">
+																		<div class="form-group">
+																	  		<label class="form-label">#{messages.EndDate} </label>
+																	  		<input type="text" class="form-control" placeholder="#{messages.EndDate}" id="categoryEndDate" />
+																	  		<span id="categoryEndDateMsg" style="display: none;">#{messages.Valid_End_Date_Msg}</span>
+																		</div>
+																  	</div>
+																  	<div class="col-md-12" id="categoryStatusDiv">
+																		<div class="form-group">
+																	  		<label class="form-label">#{messages.Status} </label>
+																	  		<select class="selectpicker" id="categoryStatus">
+																				<option value="true">#{messages.Active}</option>
+																				<option value="false">#{messages.InActive}</option>
+																			</select>
+																		</div>
+																  	</div>
+																</div>
+															</div>
+															<div class="modal-footer">
+																<a href="#" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">
+															  		<i class="fa fa-remove"></i> #{messages.Cancel}
+																</a>
+																<button type="button" class="btn btn-primary text-start" id="categorySave" onclick="saveCategoryInfo();">
+																	#{messages.Save}
+																</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div> 
+											
+											<input type="hidden" value="#{messages.User_Already_Exist}" id="User_Already_Exist" />
+										  	<input type="hidden" value="#{messages.Role_Already_Exist}" id="Role_Already_Exist" />
+										  	<input type="hidden" value="#{messages.Something_Went_Wrong}" id="Something_Went_Wrong" />
+										  	<input type="hidden" id="Are_you_sure" value="#{messages.Are_You_Sure}" />
+											<input type="hidden" id="You_Want_To_Disable_Category" value="#{messages.You_Want_To_Disable_Category}" /> 
+											<input type="hidden" id="Category_Successfully_Disabled" value="#{messages.Category_Successfully_Disabled}" /> 
+											<input type="hidden" id="You_Want_To_Enable_Category" value="#{messages.You_Want_To_Enable_Category}" /> 
+											<input type="hidden" id="Category_Successfully_Enabled" value="#{messages.Category_Successfully_Enabled}" /> 
+											<input type="hidden" id="Done_Msg" value="#{messages.Done}" /> 
+											<input type="hidden" id="Cancelled" value="#{messages.Cancelled}" /> 
+											<input type="hidden" id="You_Want_To_Delete_Category" value="#{messages.You_Want_To_Delete_Category}" />  
+											<input type="hidden" id="Category_Deleted_Successfully" value="#{messages.Category_Deleted_Successfully}" />
+											<input type="hidden" id="Category_Is_Safe" value="#{messages.Category_Is_Safe}" />
+											<input type="hidden" id="Save_Msg" value="#{messages.Save}" />
+											<input type="hidden" id="Update_Msg" value="#{messages.Update}" />
+											<input type="hidden" id="Create_Category" value="#{messages.Create_Category}" />
+											<input type="hidden" id="Update_Category" value="#{messages.Update_Category}" />
+										</h:form>
+									</div>
+								</div>
+		  					</div>
+		  					<!-- /.row -->
+						</section>
+						<!-- /.content -->
+				  	</div>
+			  	</div>
+			  	<f:verbatim>
+					<script type="text/javascript">
+		     			//<![CDATA[
+		     				
+		     				var table;
+		     				var categoryLangId;
+	     				 	var endDateValidation = false;
+		     				
+		     				$('#categoryStartDate').inputmask('dd.mm.yyyy');
+	     				 	$('#categoryEndDate').inputmask('dd.mm.yyyy');
+	     				 	
+		     				function addNewCategory(){
+		     					categoryLangId = '';
+		     					$("#categoryName").val('');
+					  			$("#categoryDesc").val('');
+					  			$("#categoryStartDate").val('');
+					  			$("#categoryEndDate").val('');
+					  			$("#categoryNameMsg").attr("style","display:none;");
+					  			$("#categoryNameValidate").attr("style","display:none;");
+					  			$("#categoryStartDateMsg").attr("style","display:none;");
+					  			$("#categoryEndDateMsg").attr("style","display:none;");
+					  			$("#categoryStatusDiv").attr("style","display:none;");
+					  			$("#categorySave").html('<i class="fa fa-save"></i> ' + $("#Save_Msg").val());
+					  			$("#myLargeModalLabel").html($("#Create_Category").val());
+		     				}
+		     				
+		     				function editCategory(cateLangId){
+		     					addNewCategory();
+		     					$("#categoryStatusDiv").attr("style","");
+		     					$("#categorySave").html('<i class="fa fa-save"></i>' + $("#Update_Msg").val());
+		     					$("#myLargeModalLabel").html($("#Update_Category").val());
+		     					 
+		     					$.ajax({
+						    		type: 'post',
+						    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:categoryBean.editCategory()',
+						    		data: { categoryLangId: cateLangId },
+					    			success: function(res) {
+					    				var result = res.split("\nSplitData");
+					    				var parsedData = JSON.parse(result[0]);
+					    				var categoryName = parsedData.categoryName;
+					    				var categoryDesc = parsedData.description;
+					    				var categoryStartDate = parsedData.startDate;
+					    				var categoryEndDate = parsedData.endDate;
+					    				var status = parsedData.status;
+					    				categoryLangId = parsedData.categoryLangId;
+					    				$("#categoryName").val(categoryName);
+							  			$("#categoryDesc").val(categoryDesc);
+							  			$("#categoryStartDate").val(categoryStartDate);
+							  			$("#categoryEndDate").val(categoryEndDate);
+							  			if(status){
+							  				$("#categoryStatus").val("true");
+							  			} else {
+							  				$("#categoryStatus").val("false");
+							  			}
+							  			$('#categoryStatus').selectpicker('refresh')
+					    			}
+						    	});
+		     				}
+		     				
+		     				function saveCategoryInfo(){
+		     					endDateValidation = false;
+					  			var categoryName = $("#categoryName").val();
+					  			var categoryDesc = $("#categoryDesc").val();
+					  			var categoryStartDate = $("#categoryStartDate").val();
+					  			var categoryEndDate = $("#categoryEndDate").val();
+					  			var status = $("#categoryStatus").val();
+					  			
+					  			$("#categoryNameMsg").attr("style","display:none;");
+					  			$("#categoryStartDateMsg").attr("style","display:none;");
+					  			$("#categoryEndDateMsg").attr("style","display:none;");
+					  			
+					  			var submit = true;
+					  			if(categoryName != null && categoryName.trim().length > 0){
+					  				$("#categoryNameMsg").attr("style","display:none;");
+					  			} else{
+					  				$("#categoryNameMsg").attr("style","display:block;color:red;");
+					  				submit = false;
+					  			}
+					  			
+								if(categoryStartDate != null && categoryStartDate.trim().length > 0){
+									$("#categoryStartDateMsg").attr("style","display:none;");
+									if(categoryStartDate.trim().length != 10){
+										$("#categoryStartDateMsg").attr("style","display:block;color:red;");
+										submit = false;
+									} else if(categoryStartDate.trim().length == 10){
+						  				if(/^[/\s/g0-9./-]+$/.test(categoryStartDate.trim())){
+						  					if(!validateDate(categoryStartDate)){
+						  						$("#categoryStartDateMsg").attr("style","display:block;color:red;");
+							  					submit = false;
+						  					} else {
+						  						endDateValidation = true;
+						  					}
+						  				} else {
+						  					$("#categoryStartDateMsg").attr("style","display:block;color:red;");
+						  					submit = false;
+						  				}
+						  			}
+								} 
+								
+								if(categoryEndDate != null && categoryEndDate.trim().length > 0){
+									$("#categoryEndDateMsg").attr("style","display:none;");
+									if(categoryEndDate.trim().length != 10){
+										$("#categoryEndDateMsg").attr("style","display:block;color:red;");
+										submit = false;
+									} else if(categoryEndDate.trim().length == 10){
+						  				if(/^[/\s/g0-9./-]+$/.test(categoryEndDate.trim())){
+						  					if(!validateDate(categoryEndDate)){
+						  						$("#categoryEndDateMsg").attr("style","display:block;color:red;");
+							  					submit = false;
+						  					}
+						  				} else {
+						  					$("#categoryEndDateMsg").attr("style","display:block;color:red;");
+						  					submit = false;
+						  				}
+						  			}
+								} 
+
+								if(submit){
+									blockUI();
+						  			$.ajax({
+							    		type: 'post',
+							    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:categoryBean.persistUserData()',
+							    		data: { categoryName: categoryName,
+							    				categoryDesc: categoryDesc,
+								    			categoryStartDate: categoryStartDate,
+								    			categoryEndDate: categoryEndDate,
+								    			status: status,
+								    			categoryLangId: categoryLangId
+							    			},
+						    			success: function(res) {
+						    				var result= res.split('\n', 1);
+						    				unblockUI();
+						    				if(result != null && result != '' && result == "AlreadyExist"){
+						    					$("#categoryNameValidate").attr("style","color:red;");
+						    				} else if(result != null && result != '' && result == "false"){
+						    					$('#createNewCategory').modal('hide');
+						    					swal($("#Something_Went_Wrong").val());
+						    				} else{
+						    					window.location = "category.jsf";
+						    				}
+						    			}
+							    	});
+								}
+					  		}
+		     				
+		     				function validateDate(date){
+		     					var split = date.split(".");
+		     		         	day = split[0].trim();
+		     		         	month = split[1].trim();
+		     		         	year = split[2].trim();
+		     		         	var enddate =  new Date(split[2],split[1]-1,split[0]);
+    			                var today = new Date();
+    			                var nowyear = today.getFullYear();
+    			                var nowmonth = today.getMonth();
+    			                var nowday = today.getDate();
+    			                var startdate = new Date(nowyear,nowmonth,nowday);
+    			                
+    			                if(endDateValidation){
+    			                	var startdateSplit = $("#categoryStartDate").val().split(".");
+    			                	startdate =  new Date(startdateSplit[2],startdateSplit[1]-1,startdateSplit[0]);
+    			                }
+    			                
+		     		         	if (day < 1 || day > 31) { // check day range
+		     		         		return false;
+		     		            } else if (month < 1 || month > 12) { // check month range
+		     		            	return false;
+		     		            } else if ((month==4 || month==6 || month==9 || month==11) && day==31) {
+		     		            	return false;
+		     		            } else if (month == 2) { // check for february 29th
+		     		            	var isleap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+		     		                if (day>29 || (day==29 && !isleap)) {
+		     		                	return false;
+		     		                }else{
+		    			                if(enddate < startdate){
+		    			                	return false;
+		    			                } else {
+		    			                	return true;		    			                	
+		    			                }
+		     			            }
+		     		            } else{
+	     		            	 	if(enddate < startdate){
+	    			                	return false;
+	    			                } else {
+	    			                	return true;		    			                	
+	    			                }
+		     			        }
+		     				}
+		     				
+							function updateStatus(val, index, categoryId){
+					  			
+					  			var questionMsg =  $("#You_Want_To_Enable_Category").val();
+					  			if(val == "true"){
+					  				questionMsg =  $("#You_Want_To_Disable_Category").val();
+					  			}
+					  			 
+						  		swal({
+						            title: $("#Are_you_sure").val(),
+						            text: questionMsg,
+						            type: "success",
+						            showCancelButton: true,
+						            confirmButtonColor: "#EF5350",
+						            confirmButtonText: $("#YesMsg").val(),
+						            cancelButtonText: $("#NoMsg").val(),
+						            closeOnConfirm: false,
+						            closeOnCancel: false
+						        },
+						        function(isConfirm){
+						            if (isConfirm) {
+						            	var badge = "badge-success";
+						            	var status = "true";
+						            	var valStr = $("#EnabledMsg").val();
+						            	var successMsg = $("#Category_Successfully_Enabled").val();
+						            	if(val == "true"){
+						  					val = "false";
+						  					valStr = $("#DisabledMsg").val();
+						  					successMsg = $("#Category_Successfully_Disabled").val();
+						  					badge = "badge-danger";
+						  					status = "false";
+							  			}else{
+							  				val = "true";
+							  			}
+						            	updateCategoryStatus(status, categoryId);
+						            	var status = "<a href=\"#\" onclick=\"updateStatus('"+val+"','" + index + "','" + categoryId + "');\" ><span class=\"badge "+badge+"\">"+valStr+"</span></a>";
+						            	table.cell({row:index, column:4}).data(status).draw();
+					            		swal({
+						                    title: $("#Done_Msg").val(),
+						                    text: successMsg,
+						                    showConfirmButton: false,
+						                    timer: 1000,
+						                    type: "success"
+						                });
+						            } else {
+						                swal({
+						                    title: $("#Cancelled").val(),
+						                    text: $("#Category_Is_Safe").val(),
+						                    showConfirmButton: false,
+						                    timer: 1000,
+						                    type: "error"
+					                	});
+						            }
+						        });
+					  		}
+							
+							function deleteCategory(categoryId){
+						  		swal({
+						            title: $("#Are_you_sure").val(),
+						            text: $("#You_Want_To_Delete_Category").val(),
+						            type: "success",
+						            showCancelButton: true,
+						            confirmButtonColor: "#EF5350",
+						            confirmButtonText: $("#YesMsg").val(),
+						            cancelButtonText: $("#NoMsg").val(),
+						            closeOnConfirm: false,
+						            closeOnCancel: false
+						        },
+						        function(isConfirm){
+						            if (isConfirm) {
+						            	deleteCate(categoryId);
+					            		swal({
+						                    title: $("#Done_Msg").val(),
+						                    text: $("#Category_Deleted_Successfully").val(),
+						                    showConfirmButton: false,
+						                    timer: 1000,
+						                    type: "success"
+						                });
+						            } else {
+						                swal({
+						                    title: $("#Cancelled").val(),
+						                    text: $("#Category_Is_Safe").val(),
+						                    showConfirmButton: false,
+						                    timer: 1000,
+						                    type: "error"
+					                	});
+						            }
+						        });
+					  		}
+					  		
+					  		function deleteCate(categoryId){
+					  			$.ajax({
+						    		type: 'post',
+						    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:categoryBean.deleteCategory()',
+						    		data: {	categoryId: categoryId },
+					    			success: function() {
+					    				window.location = "category.jsf";
+					    			}
+						    	});
+					  		}
+					  		
+					  		function updateCategoryStatus(status, categoryId){
+					  			$.ajax({
+						    		type: 'post',
+						    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:categoryBean.updateCategoryStatus()',
+						    		data: {	status: status,
+						    				categoryId: categoryId
+						    			},
+					    			success: function() {}
+						    	});
+					  		}
+					  		
+				  		 	$('#categoryName, #categoryDesc, #categoryStartDate, #categoryEndDate').keypress(function (e) {
+					        	var key = e.which;
+					        	if(key == 13) {  // the enter key code
+			         		 		$('#categorySave').trigger('click');
+				        	    	return false;  
+				        	    }
+			        	  	});
+							
+		     				
+			  			//]]>  
+					</script>
+				</f:verbatim>
+         	</ui:define> 
+      	</ui:composition> 
+   	</h:body> 
+</html>	

@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:svg="http://www.w3.org/2000/svg" 
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+   
+   	<body>
+		<ui:composition> 
+         	<!--  BEGIN NAVBAR  -->
+		    <header class="main-header">
+				<div class="d-flex align-items-center logo-box justify-content-start">
+					<a href="#" class="waves-effect waves-light nav-link d-none d-md-inline-block mx-10 push-btn bg-transparent text-white" data-toggle="push-menu" role="button">
+						<span class="icon-Align-left"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
+					</a>	
+					<!-- Logo -->
+					<a href="#" class="logo">
+						<!-- logo-->
+					  	<div class="logo-lg">
+						  	<span class="light-logo"><img src="/resources/assets/images/hot14021.png" alt="logo" /></span>
+						  	<span class="dark-logo"><img src="/resources/assets/images/hot14021.png" alt="logo" /></span>
+					  	</div>
+					</a>	
+				</div>  
+			    <!-- Header Navbar -->
+			    <nav class="navbar navbar-static-top">
+			      	<!-- Sidebar toggle button-->
+				  	<div class="app-menu">
+						<ul class="header-megamenu nav">
+							<li class="btn-group nav-item d-md-none">
+								<a href="#" class="waves-effect waves-light nav-link push-btn" data-toggle="push-menu" role="button">
+									<span class="icon-Align-left"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
+						    	</a>
+							</li>
+						</ul>
+				  	</div>
+					
+			      	<div class="navbar-custom-menu r-side">
+			        	<ul class="nav navbar-nav">	
+							<li class="btn-group nav-item d-lg-inline-flex d-none"  style="display: none !important;">
+								<a href="#" data-provide="fullscreen" class="waves-effect waves-light nav-link full-screen" 
+									title="Full Screen" style="background-color: #d9d5d5;">
+									<i class="icon-Expand-arrows"><span class="path1"></span><span class="path2"></span></i>
+							    </a>
+							</li>	  
+							
+							<!-- Company Name -->
+							<li class="btn-group d-lg-inline-flex"> <!-- d-none -->
+								<div class="app-menu">
+									<div class="search-bx">  <!-- mx-5 -->
+										<form>
+											<div class="input-group">
+ 											  <!-- <input type="search" class="form-control" placeholder="#{messages.Search}" aria-label="Search" aria-describedby="button-addon2" /> -->
+											  <div class="input-group-append">
+												<button class="btn" type="button" id="button-addon3" title="#{activeUser ne null ? activeUser.company.companyName : ''}" > 
+													#{activeUser ne null and activeUser.company.companyName.length() gt 15 ? activeUser.company.companyName.substring(0,15) : activeUser.company.companyName}
+													<!-- <i class="icon-Search"><span class="path1"></span><span class="path2"></span></i> -->
+												</button>
+											  </div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</li>
+							
+					      	<!-- Language Selection -->
+				          	<li class="dropdown notifications-menu">
+								<a href="#" class="waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown"
+								 	title="#{messages.Languages}" style="background-color: #d9d5d5;">
+									<i class="flag-icon flag-icon-#{localeSelector.localeString.toLowerCase()} ltrrtl-margin-minus-3px" ></i>
+								</a>
+								<ul class="dropdown-menu animated bounceIn">
+								  	<li>
+										<ul class="menu sm-scrol">
+											<ui:repeat var="langlist" value="#{languageBean.langList()}" >
+										  		<li style="#{localeSelector.localeString.toLowerCase() eq langlist.langCode.toLowerCase() ? 'background-color: blue;' : ''}">
+													<a class="#{localeSelector.localeString.toLowerCase() eq langlist.langCode.toLowerCase() ? 'active' : ''}" 
+														href="#" onclick="changeLocaleString('#{langlist.langCode.toLowerCase()}');">
+														<i class="flag-icon flag-icon-#{langlist.langCode.toLowerCase()}"></i> #{langlist.langName}
+												 	</a>
+										  		</li>
+										  	</ui:repeat>
+										</ul>
+								  	</li>
+								</ul>
+		  					</li>	
+			          		
+			          		<!-- Other Data -->
+							<li class="dropdown user user-menu">
+				            	<a href="#" class="waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown" style="background-color: #d9d5d5;">
+									<i class="icon-User"><span class="path1"></span><span class="path2"></span></i>
+				            	</a>
+				            	<ul class="dropdown-menu animated flipInX">
+					              	<li class="user-body">
+									 	<a class="dropdown-item" href="profile.jsf"><i class="ti-user text-muted me-2"></i> #{messages.My_Profile}</a>
+									 	<!-- <a class="dropdown-item" href="#"><i class="ti-settings text-muted me-2"></i> Settings</a> -->
+									 	<div class="dropdown-divider"></div>
+									 	<a class="dropdown-item" href="#logout" onclick="sessionLogout();"><i class="ti-lock text-muted me-2"></i> #{messages.Log_Out}</a>
+				              		</li>
+			            		</ul>
+			          		</li>
+		        		</ul>
+		      		</div>
+		    	</nav>
+	  		</header>
+	    	<!--  END NAVBAR  -->
+		</ui:composition>	
+   	</body>
+</html>

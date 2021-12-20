@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:svg="http://www.w3.org/2000/svg" 
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+   	<h:body> 
+    	<ui:composition template = "/layout/indextemplate.xhtml">
+       		<ui:define name = "content">
+	       		<h:head>
+	       		</h:head>
+				<h:form>
+					<h:messages globalOnly="true" style="display:none;"/>
+					<h:commandButton rendered="false" action="#{signUpBean.sendSignUpLink()}" />
+					<h:commandButton rendered="false" action="#{signUpBean.activateSignUpLink()}" />
+					<h:commandButton rendered="false" action="#{signUpBean.resetPassword()}" />
+					<h:commandButton rendered="false" action="#{signUpBean.setNewPassword()}" />
+					<h:commandButton rendered="false" action="#{identity.logout()}" />
+					<h:commandButton rendered="false" action="#{donorBean.execute()}" />
+					<h:commandButton rendered="false" action="#{campaignBean.execute()}" />
+					<h:commandButton rendered="false" action="#{campaignBean.updateProdGroupStatus()}" />
+					<h:commandButton rendered="false" action="#{campaignBean.deleteProdGroup()}" />
+					<h:commandButton rendered="false" action="#{profileBean.persistCompanyData()}" />
+					<h:commandButton rendered="false" action="#{profileBean.persistUserData()}" />
+					<h:commandButton rendered="false" action="#{languageBean.updateLocaleString()}" />
+					<h:commandButton rendered="false" action="#{profileBean.validateOldPassword()}" />
+					<h:commandButton rendered="false" action="#{profileBean.setNewPassword()}" />
+					
+					<h:commandButton rendered="false" action="#{donationCart.loadProdGroupDescription()}" />
+					
+					<h:commandButton rendered="false" action="#{dashBoardBean.payMethodStatistics()}" />
+					<h:commandButton rendered="false" action="#{dashBoardBean.payStatusStatistics()}" />
+					<h:commandButton rendered="false" action="#{dashBoardBean.donorStatistics()}" />
+					
+					<h:commandButton rendered="false" action="#{recurringBean.chargeFromRecurringList()}" />	
+					<h:commandButton rendered="false" action="#{myTeamBean.persistUserData()}" />
+					<h:commandButton rendered="false" action="#{myTeamBean.persistNewRole()}" />		
+					<h:commandButton rendered="false" action="#{payMethodBean.updatePaymentMethodDetails()}" />	
+					<h:commandButton rendered="false" action="#{stripeBean.stripeAccountCreationUrl()}" />	
+					<h:commandButton rendered="false" action="#{categoryBean.persistUserData()}" />		
+					<h:commandButton rendered="false" action="#{categoryBean.updateCategoryStatus()}" />
+					<h:commandButton rendered="false" action="#{categoryBean.deleteCategory()}" />
+					<h:commandButton rendered="false" action="#{categoryBean.editCategory()}" />
+				</h:form>       			
+         	</ui:define> 
+      	</ui:composition> 
+   	</h:body> 
+</html>	

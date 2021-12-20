@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+
+	<h:head>
+	    <meta charset="utf-8" />
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" />
+	    <title>#{messages.Registration}</title>
+	
+	    <link rel="icon" type="image/x-icon" href="/resources/assets/img/favicon.ico"/>
+	    
+	   	<!-- Vendors Style-->
+		<link rel="stylesheet" type="text/css" href="/resources/assets/vendor_components/bootstrap/dist/css/bootstrap.css" />
+		<link rel="stylesheet" type="text/css" href="/resources/assets/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="/resources/assets/css/skin_color.css" />
+	
+		<!-- Vendor JS -->
+		<script src="/resources/assets/js/vendors.min.js"></script>
+		<script src="/resources/assets/js/pages/chat-popup.js"></script>
+	    <script src="/resources/assets/icons/feather-icons/feather.min.js"></script>	
+	    
+	    <style>
+	    
+	    	.error{
+	    		color: red;
+	    	}
+	    
+	    </style>
+	    
+	</h:head>
+
+	<body class="hold-transition theme-primary bg-img" style="background-image: url(/resources/assets/images/auth-bg/bg-2.jpg)">
+		<div id="loader" style="opacity: 0.5;display: none;" />
+		<div class="container h-p100">
+			<div class="row align-items-center justify-content-md-center h-p100">
+				
+				<div class="col-12">
+					<div class="row justify-content-center g-0">
+						<div class="col-lg-5 col-md-5 col-12">
+							<div class="bg-white rounded10 shadow-lg">
+								<div class="content-top-agile p-20 pb-0">
+									<h2 class="text-primary">#{messages.Get_Started_With_Us}</h2>
+									<p class="mb-0">#{messages.Register_New_Membership}</p>							
+								</div>
+								<div class="p-40">
+									<h:form>
+										<div class="form-group">
+											<div class="input-group mb-3">
+												<span class="input-group-text bg-transparent"><i class="fa fa-user"></i></span>
+												<input type="text" id="name" class="form-control ps-15 bg-transparent" placeholder="#{messages.Name}" />
+											</div>
+											<span class="error" id="nameErrorMsg" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+										</div>
+										<div class="form-group">
+											<div class="input-group mb-3">
+												<span class="input-group-text bg-transparent"><i class="fa fa-envelope"></i></span>
+												<input type="text" id="email" class="form-control ps-15 bg-transparent" placeholder="#{messages.Email}" />
+											</div>
+											<span class="error" id="emailErrorMsg" style="display: none;">#{messages.Please_Enter_Valid_Email}</span>
+										</div>
+										<div class="form-group">
+											<div class="input-group mb-3">
+												<span class="input-group-text bg-transparent"><i class="fa fa-home"></i></span>
+												<input type="text" id="orgName" class="form-control ps-15 bg-transparent" placeholder="#{messages.Organization_Name}" />
+											</div>
+											<span class="error" id="orgNameErrorMsg" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+										</div>
+									  	<div class="row">
+											<div class="col-12" style="display: none;">
+												<div class="checkbox">
+													<input type="checkbox" id="basic_checkbox_1" />
+													<label for="basic_checkbox_1">#{messages.I_Agree_To_The} <a target="_blank" href="https://softitservice.de/home/datenschutzerklarung/" class="text-warning">
+														<b>#{messages.Terms}</b></a>
+													</label>
+											  	</div>
+											</div>
+											<div class="col-12 text-center">
+											  	<button type="button" id="signupbtn" onclick="register();" class="btn btn-info margin-top-10">#{messages.Sign_In}</button>
+											</div>
+								  		</div>
+									</h:form>				
+									<div class="text-center">
+										<p class="mt-15 mb-0">#{messages.Already_Have_An_Account}?<a href="login.jsf" class="text-danger ms-5"> #{messages.Login}</a></p>
+									</div>
+								</div>
+							</div>								
+						</div>
+					</div>
+				</div>			
+			</div>
+		</div>
+		<f:verbatim>
+			<script type="text/javascript">
+     			//<![CDATA[
+		
+					$('#name').keypress(function (e) {
+			    	   	var key = e.which;
+			    	   	if(key == 13){
+			    		 	$('#signupbtn').trigger('click');
+			    	      	return false;  
+			    		}
+			    	});
+			       
+			       	$('#email').keypress(function (e) {
+			    	   	var key = e.which;
+			    	   	if(key == 13){
+			    			$('#signupbtn').trigger('click');
+			    	      	return false;  
+			    		}
+			    	});
+			       
+			       	$('#orgName').keypress(function (e) {
+			    	   	var key = e.which;
+			    	   	if(key == 13){
+			    			$('#signupbtn').trigger('click');
+			    	      	return false;  
+			    		}
+			    	});
+					
+					function register(){
+						var name = $('#name').val();
+						var email = $('#email').val();
+						var orgName = $('#orgName').val();
+						$("#nameErrorMsg").attr("style","display:none;");
+						$("#emailErrorMsg").attr("style","display:none;");
+						$("#orgNameErrorMsg").attr("style","display:none;");
+						if(name != null && name.trim().length > 0 
+								&& email != null && email.trim().length > 0 && ValidateEmail(email)
+								&& orgName != null && orgName.trim().length > 0 ){
+							blockUI();
+							$.ajax({
+					    		type: 'post',
+					    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:signUpBean.sendSignUpLink()',
+			    				data: {	name: name,
+			    						email: email,
+			    						orgName: orgName
+			    					},
+					  	       	success: function (res) {
+				      				var result=(res.split('\n', 1));
+				     	 			var valid = result[0];
+				      				if(valid == "valid"){
+				      					window.location = "registerresult.jsf?msg=valid";
+				      				} else if(valid == "exist"){
+				      					window.location = "registerresult.jsf?msg=exist";
+				      				} else{
+				      					window.location = "registerresult.jsf?msg=error";
+				      				}
+				      	  		}
+					    	});
+						}else{
+							if(name == null || name == '' || name.trim().length == 0){
+				    			$("#nameErrorMsg").attr("style","color:red;display:block;");
+				    		}
+				    		if(email == null || email == '' || email.trim().length == 0
+				    				|| (email != null && email != '' && !ValidateEmail(email))){
+				    			$("#emailErrorMsg").attr("style","color:red;display:block;");
+				    		}
+				    		if(orgName == null || orgName == '' || orgName.trim().length == 0){
+				    			$("#orgNameErrorMsg").attr("style","color:red;display:block;");
+				    		}
+						}
+					}
+					
+				 	function ValidateEmail(email) {
+						if(email!=null && email!=''){
+							email = email.trim();
+					    	var expr = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+					        return expr.test(email);
+						}
+					}
+				 	
+				 	function blockUI() {
+						$("#loader").attr("style","display: block;opacity: 0.5;");
+					}
+
+					function unblockUI() {
+						$("#loader").attr("style","display: none;");
+					}
+		
+				//]]>  
+			</script>
+		</f:verbatim>
+	</body>
+</html>

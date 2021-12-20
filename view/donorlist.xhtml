@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+   	<h:body> 
+    	<ui:composition template = "/layout/indextemplate.xhtml">
+       		<ui:define name = "content">
+	       		<h:head>
+					<script src="/resources/assets/js/datatables/datatable_donorlist.js"></script>
+					<style>
+
+						table.dataTable {
+							border-collapse: collapse !important;;
+						}
+						
+						.dataTables_info, .dataTables_length, .dt-buttons {
+						    display: inline-block !important;
+						}
+						
+						.dt-buttons {
+						    float: right;
+						}
+						
+						.fa {
+    						font-size: large;
+						}
+						
+						.theme-primary .dt-buttons .dt-button {
+ 		   					background-color: #f00;
+						}
+						
+						.dropdown-item.active, .dropdown-item:active {
+						    background-color:  blue !important;
+						    color: #fff !important;
+						}
+						
+						.dt-button-collection a:hover {
+						    color: #fff !important;
+						}
+						
+						.dt-button-collection {
+							left: 0px !important;
+							max-height: 300px !important;
+							overflow-y: scroll;
+							overflow-x: hidden;
+						}
+						
+					</style>
+				</h:head>
+	       		<div class="content-wrapper">
+	  				<div class="container-full">
+	  					<div id="loader" />
+						<!-- Content Header (Page header) -->
+						<div class="content-header">
+							<div class="d-flex align-items-center">
+								<div class="me-auto">
+									<h3 class="page-title">#{messages.Donors}</h3>
+									<div class="d-inline-block align-items-center">
+										<nav>
+											<ol class="breadcrumb">
+												<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i></a></li>
+												<li class="breadcrumb-item" aria-current="page">#{messages.ManageDonors}</li>
+												<li class="breadcrumb-item active" aria-current="page">#{messages.Donors}</li>
+											</ol>
+										</nav>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Main content -->
+						<section class="content">
+		  					<div class="row">
+								<div class="col-12">
+			  						<div class="box">
+										<!-- /.box-header -->
+										<div class="box-body">
+											<div>
+									  			<table id="datatable_donorlist" class="table table-hover display nowrap margin-top-10 w-p100">
+													<thead>
+														<tr>
+															<th>#{messages.User} ID</th>
+															<th>#{messages.Name}</th>
+															<th>#{messages.Address}</th>
+															<th>#{messages.Email}</th>
+															<th>#{messages.Telephone}</th>
+															<th>#{messages.Amount}</th>
+															<th>#{messages.CreatedBy}</th>
+															<th>#{messages.MoreInfo}</th>
+														</tr>
+													</thead>
+													<tbody>
+														
+													</tbody>				  
+												</table>
+											</div>              
+										</div>
+										<!-- /.box-body -->
+							  		</div>
+							  		<!-- /.box -->          
+								</div>
+								<!-- /.col -->
+						  	</div>
+						  	<!-- /.row -->
+						</section>
+						<!-- /.content -->
+				  	</div>
+			  	</div>
+        	</ui:define> 
+      	</ui:composition> 
+   	</h:body> 
+</html>	

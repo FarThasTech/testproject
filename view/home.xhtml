@@ -1,0 +1,979 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:svg="http://www.w3.org/2000/svg" 
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+	<h:head>
+		<!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+	    <link href="/resources/assets/css/dashboard/dash_1.css" rel="stylesheet" type="text/css" />
+	    <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+		
+    	<script src="/resources/assets/js/dashboard/dash_1.js"></script>
+	</h:head>
+   	<h:body> 
+    	<ui:composition template = "/layout/indextemplate.xhtml">
+       		<ui:define name = "content">
+       			<div id="loader" />
+	       		<div class="content-wrapper">
+				  <div class="container-full">
+					<!-- Main content -->
+					<section class="content">
+						<!-- <c:if test="#{activeUser != null and activeUser.company != null and !activeUser.company.liveAccount}">
+							<div class="card">
+							  	<div class="card-header">
+									<h4 class="card-title">Test Mode</h4>
+							  	</div>
+							</div>
+						</c:if> -->
+						<input type="hidden" value="#{dashBoardBean.dashboardValue()}" />
+						<div class="row">
+							<div class="col-xl-12 col-12">
+								<div class="row">
+									<div class="col-md-6 col-xl-3">
+										<div class="box bg-danger">
+											<div class="box-body">
+												<div class="d-flex">
+													<h3 class="fw-600 mb-0">#{dashBoardVO.campaignCount}</h3>
+													<div class="list-icons ms-auto">
+														<div class="list-icons-item dropdown">
+														</div>
+													</div>
+												</div>
+												<div style="font-weight: bold;">
+													<a href="campaignlist.jsf" style="color: white;">
+														#{messages.TotalCampaign}
+													</a>
+												</div>
+											</div>
+											<div id="sparklines_color"></div>
+										</div>
+									</div>
+									<div class="col-md-6 col-xl-3">
+										<div class="box bg-info">
+											<div class="box-body">
+												<div class="d-flex">
+													<h3 class="fw-600 mb-0">#{dashBoardVO.donorCount}</h3>
+												</div>
+												<div style="font-weight: bold;">
+													<a href="donorlist.jsf" style="color: white;">
+														#{messages.TotalDonor}
+													</a>
+												</div>
+											</div>
+											<div class="container-fluid">
+												<div id="chart_bar_color"></div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6 col-xl-3">
+										<div class="box bg-warning">
+											<div class="box-body">
+												<div class="d-flex">
+													<h3 class="fw-600 mb-0">
+														${currencyCode ne 'EUR' ? currencySymbol : ''}
+															#{dashBoardVO.currentMonthDonation}
+														${currencyCode eq 'EUR' ? currencySymbol : ''}
+													</h3>
+												</div>
+												<div style="font-weight: bold;">
+													#{messages.ThisMonth}
+												</div>
+											</div>
+											<div id="line_chart_color"></div>
+										</div>
+									</div>
+					
+									<div class="col-md-6 col-xl-3">
+										<div class="box bg-primary">
+											<div class="box-body">
+												<div class="d-flex">
+													<h3 class="fw-600 mb-0">
+														${currencyCode ne 'EUR' ? currencySymbol : ''}
+															#{dashBoardVO.totalDonation}
+														${currencyCode eq 'EUR' ? currencySymbol : ''}
+													</h3>
+													<div class="list-icons ms-auto">
+														<div class="list-icons-item dropdown">
+														</div>
+													</div>
+												</div>
+												<div style="font-weight: bold;">
+													#{messages.TotalDonation}
+												</div>
+											</div>
+											<div id="linearea"></div>
+										</div>
+								  	</div>
+								  	
+								  	<!-- <div class="col-md-6 col-xl-3">
+										<div class="box bg-danger">
+											<div class="box-body">
+												<div class="d-flex">
+													<h3 class="fw-600 mb-0">
+														${currencyCode ne 'EUR' ? currencySymbol : ''}
+															#{dashBoardVO.totalDonation}
+														${currencyCode eq 'EUR' ? currencySymbol : ''}
+													</h3>
+													<div class="list-icons ms-auto">
+														<div class="list-icons-item dropdown">
+														</div>
+													</div>
+												</div>
+												<div style="font-weight: bold;">
+													#{messages.TotalDonation}
+												</div>
+											</div>
+											<div id="sparklines_color21"></div>
+										</div>
+									</div> -->
+								</div>
+								<div class="row">
+									<div class="col-xl-4 col-12">
+										<div class="box">
+											<div class="box-body analytics-info">
+												<h4 class="box-title">#{messages.Donor_Statistics}</h4>
+												<div id="donor-bar" style="height:400px;"></div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-4 col-12">
+										<div class="box">
+											<div class="box-body analytics-info">
+												<h4 class="box-title">#{messages.Pay_Method_Stat}</h4>
+												<div id="paymentMethod-pie" style="height:400px;"></div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-4 col-12">
+										<div class="box">
+											<div class="box-body analytics-info">
+												<h4 class="box-title">#{messages.Pay_Status_Stat}</h4>
+												<div id="paymentStatus-chart" style="height:400px;"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!-- /.content -->
+				  </div>
+		 	 	</div>
+		 	 	<input type="hidden" id="currencyFormat" name="currencyFormat" value="#{localeSelector.localeString.toLowerCase()}-#{localeSelector.localeString.toUpperCase()}" />
+				<input type="hidden" id="symbolcurrency" name="symbolcurrency" value="#{currencySymbol}" />
+				<input type="hidden" id="fromDateStat" name="fromDateStat" value="" />
+				<input type="hidden" id="endDateStat" name="endDateStat" value="" />
+				<input type="hidden" id="Current_Month_Stat" name="Current_Month_Stat" value="#{messages.Current_Month_Stat}" />
+				<input type="hidden" id="Current_Year_Stat" name="Current_Year_Stat" value="#{messages.Current_Year_Stat}" />
+				<input type="hidden" id="Pay_Method_Stat" name="Pay_Method_Stat" value="#{messages.Pay_Method_Stat}" />
+				<input type="hidden" id="Pay_Status_Stat" name="Pay_Status_Stat" value="#{messages.Pay_Status_Stat}" />
+				<input type="hidden" id="No_Data_Available" name="No_Data_Available" value="#{messages.No_Data_Available}" />
+				<input type="hidden" id="Save" name="Save" value="#{messages.Save}" />
+				
+				
+				
+		 	 	<script src="/resources/assets/vendor_components/echarts/dist/echarts-en.min.js"></script>
+			  	<script src="/resources/assets/vendor_components/d3/d3.min.js"></script>
+				<script src="/resources/assets/vendor_components/d3/d3_tooltip.js"></script>
+				<script src="/resources/assets/vendor_components/apexcharts-bundle/dist/apexcharts.js"></script>
+			  	<f:verbatim>
+					<script type="text/javascript">
+		     			//<![CDATA[
+		     				
+		     				setTimeout( function() { initData(); }, 1);
+		     				
+		     				function initData(){
+		     					donorStatistics();
+		     					paymentMethodStatistics();
+		     					paymentStatusStatistics();
+		     				}
+
+						    var curr = $('#symbolcurrency').val();
+						    var curryFormat = $("#currencyFormat").val();
+						    function currencyFormatValue(data){
+						    	return  curr.trim() == '€' ? (Number(data).toLocaleString(curryFormat, {minimumFractionDigits: 2 , maximumFractionDigits: 2}) + curr.trim()) : (curr.trim()+ Number(data).toLocaleString(curryFormat, {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+						    }
+						    
+						    /************************************ Payment Method Statistics ************************************/
+		     				
+		     				function paymentMethodStatistics(){
+		     					var fromDateFilter = $("#fromDateFilter").val();
+			    			   	var toDateFilter = $("#toDateFilter").val();
+							 	$.ajax({
+							 		type: 'post',
+							        url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:dashBoardBean.payMethodStatistics()',
+							        data:{	
+						        		startDate: fromDateFilter,
+					    				endDate: toDateFilter
+						    		},
+							        success: function ( data, textStatus, jqXHR) {
+							        	payMethod(data);
+							        }
+							 	});
+		     				}
+		     				
+						    function payMethod(data){
+						    	var n = data.indexOf('<!DOCTYPE');
+					        	data = data.substring(0, n != -1 ? n : data.length);
+					        	var start_pos = data.indexOf('\npaymentMethodStatStart\n') + 1;
+		   			        	var end_pos = data.indexOf('\npaymentMethodStatEnd\n',start_pos);
+		   			        	var paymentMethodList = (data.substring(start_pos,end_pos)).split('\n')[1];
+		   			        	paymentMethodList = '['+paymentMethodList+']';
+		   			        	var paymentMethodData =  JSON.parse(paymentMethodList);
+		   			        	
+		   			        	var dataLabel=[]
+		   			        	for (i = 0; i < paymentMethodData.length; i++) { 
+		   			        		dataLabel.push(paymentMethodData[i].name.trim());
+					        	}
+		   			        	
+						        var paymentMethodChart = echarts.init(document.getElementById('paymentMethod-pie'));
+						        var option = {
+						            // Add title
+					                title: {
+					                	text: dataLabel != null && dataLabel != '' ? '' : $("#No_Data_Available").val(),
+				                		subtext: dataLabel != null && dataLabel != '' ? $("#Current_Month_Stat").val() : '',
+		                				left: "center",
+	    		                	    top: dataLabel != null && dataLabel != '' ? 'top' : 'center',
+		  			                    textStyle: {
+		   			                        fontSize: 24
+		 								},
+		   			                    subtextStyle: {
+		   			                    	fontSize: 12
+		   								}
+					                },
+					                
+					                textStyle: {
+						                fontFamily: 'Roboto, Arial, Verdana, sans-serif',
+						                fontSize: 13
+						            },
+					
+					                tooltip: {
+						                trigger: 'item',
+						                backgroundColor: 'rgba(0,0,0,0.75)',
+						                padding: [10, 15],
+						                textStyle: {
+						                    fontSize: 13,
+						                    fontFamily: 'Roboto, sans-serif'
+						                },
+						                formatter: function(params) {
+	       		                        	return (params.name + " : " + currencyFormatValue(params.value));
+	       		                        } 
+						            },
+					                
+					                // Add custom colors
+					                color: ['#ff8f00', '#ee1044', '#389f99', '#38649f', '#689f38'],
+					
+					                // Display toolbox
+					                toolbox: {
+					                    show: true,
+					                    orient: 'vertical',
+					                    feature: {
+					                        saveAsImage: {
+					                            show: true,
+					                            title: $("#Save").val()
+					                        }
+					                    }
+					                },
+					                
+					                // Add legend
+					                legend: {
+					                    orient: 'vertical',
+					                    x: 'right',
+					                    y: 'center',
+					                    data: dataLabel
+					                },
+					
+					                // Add series
+					                series: [{
+					                    type: 'pie',
+					                    slicedOffset: 30,
+					                    radius: '70%',
+					                    center: ['50%', '57.5%'],
+					                    itemStyle: {
+						                    normal: {
+						                        borderWidth: 1,
+						                        borderColor: '#fff'
+						                    }
+						                },
+					                    data: paymentMethodData
+					                }]
+						        };
+						    
+						        paymentMethodChart.setOption(option);
+						        paymentMethodChart.resize();
+						        
+		     				}
+						    /************************************ Payment Method Statistics ************************************/
+		     				
+						    /************************************ Payment Statis Statistics ************************************/
+		     				
+						    function paymentStatusStatistics(){
+						    	var fromDateFilter = $("#fromDateFilter").val();
+			    			   	var toDateFilter = $("#toDateFilter").val();
+							 	$.ajax({
+							 		type: 'post',
+							        url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:dashBoardBean.payStatusStatistics()',
+							        data:{	
+						        		startDate: fromDateFilter,
+					    				endDate: toDateFilter
+						    		},
+							        success: function ( data, textStatus, jqXHR) {
+							        	payStatus(data);
+							        }
+							 	});
+		     				}
+						    
+						    function payStatus(data){
+						    	var n = data.indexOf('<!DOCTYPE');
+					        	data = data.substring(0, n != -1 ? n : data.length);
+					        	var start_pos = data.indexOf('\npaymentStatusStatStart\n') + 1;
+		   			        	var end_pos = data.indexOf('\npaymentStatusStatEnd\n',start_pos);
+		   			        	var paymentStatusList = (data.substring(start_pos,end_pos)).split('\n')[1];
+		   			        	paymentStatusList = '['+paymentStatusList+']';
+		   			        	var paymentStatusData =  JSON.parse(paymentStatusList);
+		   			        	
+		   			        	var dataLabel=[]
+		   			        	for (i = 0; i < paymentStatusData.length; i++) { 
+		   			        		dataLabel.push(paymentStatusData[i].name.trim());
+					        	}
+		   			        	
+						        // based on prepared DOM, initialize echarts instance
+					            var paymentStatusChart = echarts.init(document.getElementById('paymentStatus-chart'));
+					            var option = {
+					                 title: {
+				                	 	text: dataLabel != null && dataLabel != '' ? '' : $("#No_Data_Available").val(),
+		                	 			subtext: dataLabel != null && dataLabel != '' ? $("#Current_Month_Stat").val() : '',
+                	 					left: "center",
+	    		                	    top: dataLabel != null && dataLabel != '' ? 'top' : 'center',
+		  			                    textStyle: {
+		   			                        fontSize: 24
+		 								},
+		   			                    subtextStyle: {
+		   			                    	fontSize: 12
+		   								}
+					                },
+					                
+					                textStyle: {
+						                fontFamily: 'Roboto, Arial, Verdana, sans-serif',
+						                fontSize: 13
+						            },
+					
+					                // Add tooltip
+					                tooltip: {
+						                trigger: 'item',
+						                backgroundColor: 'rgba(0,0,0,0.75)',
+						                padding: [10, 15],
+						                textStyle: {
+						                    fontSize: 13,
+						                    fontFamily: 'Roboto, sans-serif'
+						                },
+						                formatter: function(params) {
+	       		                        	return (params.name + " : " + currencyFormatValue(params.value));
+	       		                        } 
+						            },
+					
+						         	// Add custom colors
+					                color: ['#689f38', '#4974e0', '#38649f', '#389f99', '#ee1044', '#ff8f00', '#673ab7', '#e4eaec'],
+					
+					                // Display toolbox
+					                toolbox: {
+					                    show: true,
+					                    orient: 'vertical',
+					                    feature: {
+					                        saveAsImage: {
+					                            show: true,
+					                            title: $("#Save").val()
+					                        }
+					                    }
+					                },
+					
+					             	// Add legend
+					                legend: {
+					                    x: 'right',
+					                    y: 'center',
+					                    orient: 'vertical',
+					                    data: dataLabel
+					                },
+					
+					                // Add series
+					                series: [
+					                    {
+					                        name: 'Area Mode',
+					                        type: 'pie',
+					                        slicedOffset: 30,
+					                        radius: ['15%', '73%'],
+					                        center: ['50%', '57%'],
+					                        roseType: 'area',
+					                        itemStyle: {
+							                    normal: {
+							                        borderWidth: 1,
+							                        borderColor: '#fff'
+							                    }
+							                },
+					                        data: paymentStatusData,
+					                    }
+					                ]
+					            };
+					        	paymentStatusChart.setOption(option);
+		                        paymentStatusChart.resize();
+						    }
+						    
+						    /************************************ Payment Status Statistics ************************************/
+						    
+						    /***************************************** Donor Statistics ****************************************/ 
+						    
+						    function donorStatistics(){
+						    	var fromDateFilter = $("#fromDateFilter").val();
+							 	$.ajax({
+							 		type: 'post',
+							        url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:dashBoardBean.donorStatistics()',
+							        data:{	
+						        		yearValue: fromDateFilter
+						    		},
+							        success: function ( data, textStatus, jqXHR) {
+							        	donorStat(data);
+							        }
+							 	});
+		     				}
+						    
+						    function donorStat(data){
+						    	var dataValue=[],dataLabel=[];
+					        	var n = data.indexOf('<!DOCTYPE');
+					        	data = data.substring(0, n != -1 ? n : data.length);
+					        	var start_pos = data.indexOf('\ndataStatisticsStart\n') + 1;
+					        	var end_pos = data.indexOf('\ndataStatisticsEnd\n',start_pos);
+		   			        	var newSubList = (data.substring(start_pos,end_pos)).split('\n')[1];
+		   			        	newSubList = '['+newSubList+']';
+		   			        	var newSubData =  JSON.parse(newSubList);
+		   			        	var validate = false;
+					        	for (i = 0; i < newSubData.length; i++) { 
+					        		var val = newSubData[i].value;
+					        		if(val > 0){
+					        			validate = true;
+					        		}
+					        	    dataValue.push(val);
+					        	}
+		   			        	start_pos = data.indexOf('\nmonthStatisticsStart\n') + 1;
+		   			        	end_pos = data.indexOf('\nmonthStatisticsEnd\n',start_pos);
+		   			        	newSubList = (data.substring(start_pos,end_pos)).split('\n')[1];
+		   			        	newSubList = '['+newSubList+']';
+		   			        	var newSubLabel =  JSON.parse(newSubList);
+		   			        	for (i = 0; i < newSubLabel.length; i++) { 
+		   			        		dataLabel.push(newSubLabel[i].monthLabel);
+					        	}
+		   			        	
+		   			        	if(!validate){
+		   			        		dataValue = '';
+		   			        		dataLabel = '';
+		   			        	}
+		   			        	
+							    var donorChart = echarts.init(document.getElementById('donor-bar'));
+								
+						        var option = {
+						        		
+					        		title: {
+				                	 	text: validate ? '' : $("#No_Data_Available").val(),
+		                	 			subtext: validate ? $("#Current_Year_Stat").val() : '',
+                	 					left: "center",
+	    		                	    top: validate ? 'top' : 'center',
+		  			                    textStyle: {
+		   			                        fontSize: 24
+		 								},
+		   			                    subtextStyle: {
+		   			                    	fontSize: 12
+		   								}
+					                },
+					                
+					                // Setup grid
+					                grid: {
+					                    left: '1%',
+					                    right: '2%',
+					                    bottom: '3%',
+					                    containLabel: true
+					                },
+					
+					                // Add Tooltip
+					                tooltip: {
+						                trigger: 'item',
+						                backgroundColor: 'rgba(0,0,0,0.75)',
+						                padding: [10, 15],
+						                textStyle: {
+						                    fontSize: 13,
+						                    fontFamily: 'Roboto, sans-serif'
+						                },
+						                formatter: function(params) {
+	       		                        	return (params.name + " : " + params.value);
+	       		                        } 
+						            },
+					
+					                toolbox: {
+					                    show : true,
+					                    feature : {
+					                        magicType : {show: true, type: ['line', 'bar'], title: ""},
+					                        saveAsImage: {
+					                            show: true,
+					                            title: $("#Save").val()
+					                        }
+					                    }
+					                },
+					                color: ["#38649f", "#389f99"],
+					                calculable : true,
+					                xAxis : [
+					                    {
+					                        type : 'category',
+					                        data : dataLabel
+					                    }
+					                ],
+					                yAxis : [
+					                    {
+					                        type : 'value'
+					                    }
+					                ],
+					                series : [
+					                    {
+					                        name:'Site A',
+					                        type:'bar',
+					                        data: dataValue,
+					                        markPoint : {
+					                            data : [
+					                                {type : 'max', name: 'Max'},
+					                                {type : 'min', name: 'Min'}
+					                            ]
+					                        },
+					                        markLine : {
+					                            data : [
+					                                {type : 'average', name: 'Average'}
+					                            ]
+					                        }
+					                    }
+					                ]
+					            };
+						        // use configuration item and data specified to show chart
+						        donorChart.setOption(option);
+						        donorChart.resize();
+						    }
+					        /***************************************** Donor Statistics ****************************************/
+					        
+			                $(".waves-effect").on('click', resize);
+			
+			                // Resize function
+			                function resize() {
+			                	setTimeout( function() { 
+			                		paymentMethodChart.resize(); paymentStatusChart.resize();donorChart.resize();
+			                	}, 100);
+			                }
+		     				
+		     				$("#linearea").sparkline([32,24,26,24,32,26,30,34,22], {
+								type: 'line',
+								width: '100%',
+								height: '50',
+								lineColor: '#1bc5bd',
+								fillColor: '#1bc5bd',
+								lineWidth: 2,
+								tooltipFormat: '',
+							});
+		     				
+		     				document.addEventListener('DOMContentLoaded', function() {
+		     				    Widgetschart.init();
+		     				})
+		     				
+		     				var Widgetschart = function() {
+		     				    var _barChartWidget = function(element, barQty, height, animate, easing, duration, delay, color, tooltip) {
+		     				        if (typeof d3 == 'undefined') {
+		     				            console.warn('Warning - d3.min.js is not loaded.');
+		     				            return;
+		     				        }
+		     				        if(element) {
+		     				            var bardata = [];
+		     				            for (var i=0; i < barQty; i++) {
+		     				                bardata.push(Math.round(Math.random() * 10) + 10);
+		     				            }
+		     				            var d3Container = d3.select(element),
+		     				                width = d3Container.node().getBoundingClientRect().width;
+		     				            var x = d3.scale.ordinal()
+		     				                .rangeBands([0, width], 0.3);
+		     				            var y = d3.scale.linear()
+		     				                .range([0, height]);
+		     				            x.domain(d3.range(0, bardata.length));
+		     				            y.domain([0, d3.max(bardata)]);
+		     				            var container = d3Container.append('svg');
+		     				            var svg = container
+		     				                .attr('width', width)
+		     				                .attr('height', height)
+		     				                .append('g');
+		     				            var bars = svg.selectAll('rect')
+		     				                .data(bardata)
+		     				                .enter()
+		     				                .append('rect')
+		     				                    .attr('class', 'd3-random-bars')
+		     				                    .attr('width', x.rangeBand())
+		     				                    .attr('x', function(d,i) {
+		     				                        return x(i);
+		     				                    })
+		     				                    .style('fill', color);
+		     				            var tip = d3.tip()
+		     				                .attr('class', 'd3-tip')
+		     				                .offset([-10, 0]);
+		     				            if(tooltip == "hours" || tooltip == "goal" || tooltip == "members") {
+		     				            }
+		     				            if(tooltip == "hours") {
+		     				                tip.html(function (d, i) {
+		     				                    return "";
+		     				                });
+		     				            }
+		     				            if(tooltip == "goal") {
+		     				                tip.html(function (d, i) {
+		     				                    return "";
+		     				                });
+		     				            }
+		     				            if(tooltip == "members") {
+		     				                tip.html(function (d, i) {
+		     				                    return "";
+		     				                });
+		     				            }
+		     				            if(animate) {
+		     				                withAnimation();
+		     				            } else {
+		     				                withoutAnimation();
+		     				            }
+		     				            function withAnimation() {
+		     				                bars
+		     				                    .attr('height', 0)
+		     				                    .attr('y', height)
+		     				                    .transition()
+		     				                        .attr('height', function(d) {
+		     				                            return y(d);
+		     				                        })
+		     				                        .attr('y', function(d) {
+		     				                            return height - y(d);
+		     				                        })
+		     				                        .delay(function(d, i) {
+		     				                            return i * delay;
+		     				                        })
+		     				                        .duration(duration)
+		     				                        .ease(easing);
+		     				            }
+		     				            function withoutAnimation() {
+		     				                bars
+		     				                    .attr('height', function(d) {
+		     				                        return y(d);
+		     				                    })
+		     				                    .attr('y', function(d) {
+		     				                        return height - y(d);
+		     				                    });
+		     				            }
+		     				            $(window).on('resize', barsResize);
+		     				            $(document).on('click', '.sidebar-control', barsResize);
+		     				            function barsResize() {
+		     				                width = d3Container.node().getBoundingClientRect().width;
+		     				                container.attr("width", width);
+		     				                svg.attr("width", width);
+		     				                x.rangeBands([0, width], 0.3);
+		     				                svg.selectAll('.d3-random-bars')
+		     				                    .attr('width', x.rangeBand())
+		     				                    .attr('x', function(d,i) {
+		     				                        return x(i);
+		     				                    });
+		     				            }
+		     				        }
+		     				    };
+
+		     				    var _lineChartWidget = function(element, chartHeight, lineColor, pathColor, pointerLineColor, pointerBgColor) {
+		     				        if (typeof d3 == 'undefined') {
+		     				            console.warn('Warning - d3.min.js is not loaded.');
+		     				            return;
+		     				        }
+		     				        if(element) {
+		     				            var dataset = [
+		     				                { "date": "04/13/14", "alpha": "60" },
+		     				                { "date": "04/14/14", "alpha": "35" },
+		     				                { "date": "04/15/14", "alpha": "65" },
+		     				               	{ "date": "04/16/14", "alpha": "50" },
+		     				              	{ "date": "04/17/14", "alpha": "65" },
+		     				             	{ "date": "04/18/14", "alpha": "20" },
+		     				            	{ "date": "04/19/14", "alpha": "60" },
+		     				            ];
+
+		     				            var d3Container = d3.select(element),
+		     				                margin = {top: 0, right: 0, bottom: 0, left: 0},
+		     				                width = d3Container.node().getBoundingClientRect().width - margin.left - margin.right,
+		     				                height = chartHeight - margin.top - margin.bottom,
+		     				                padding = 20;
+
+		     				            var parseDate = d3.time.format("%m/%d/%y").parse,
+		     				                formatDate = d3.time.format("%a, %B %e");
+
+		     				            var tooltip = d3.tip()
+		     				                .attr('class', 'd3-tip')
+		     				                .html(function (d) {
+		     				                    return '';
+		     				                });
+		     				            var container = d3Container.append('svg');
+		     				            var svg = container
+		     				                    .attr('width', width + margin.left + margin.right)
+		     				                    .attr('height', height + margin.top + margin.bottom)
+		     				                    .append("g")
+		     				                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+		     				                        .call(tooltip);
+		     				            dataset.forEach(function (d) {
+		     				                d.date = parseDate(d.date);
+		     				                d.alpha = +d.alpha;
+		     				            });
+		     				            var x = d3.time.scale()
+		     				                .range([padding, width - padding]);
+		     				            var y = d3.scale.linear()
+		     				                .range([height, 5]);
+		     				            x.domain(d3.extent(dataset, function (d) {
+		     				                return d.date;
+		     				            }));
+		     				            y.domain([0, d3.max(dataset, function (d) {
+		     				                return Math.max(d.alpha);
+		     				            })]);
+		     				            var line = d3.svg.line()
+		     				                .x(function(d) {
+		     				                    return x(d.date);
+		     				                })
+		     				                .y(function(d) {
+		     				                    return y(d.alpha);
+		     				                });
+		     				            var clip = svg.append("defs")
+		     				                .append("clipPath")
+		     				                .attr("id", "clip-line-small");
+		     				            var clipRect = clip.append("rect")
+		     				                .attr('class', 'clip')
+		     				                .attr("width", 0)
+		     				                .attr("height", height);
+		     				            clipRect
+		     				                  .transition()
+		     				                      .duration(1000)
+		     				                      .ease('linear')
+		     				                      .attr("width", width);
+		     				            var path = svg.append('path')
+		     				                .attr({
+		     				                    'd': line(dataset),
+		     				                    "clip-path": "url(#clip-line-small)",
+		     				                    'class': 'd3-line d3-line-medium'
+		     				                })
+		     				                .style('stroke', lineColor);
+		     				            svg.select('.line-tickets')
+		     				                .transition()
+		     				                    .duration(1000)
+		     				                    .ease('linear');
+		     				            var guide = svg.append('g')
+		     				                .selectAll('.d3-line-guides-group')
+		     				                .data(dataset);
+		     				            guide
+		     				                .enter()
+		     				                .append('line')
+		     				                    .attr('class', 'd3-line-guides')
+		     				                    .attr('x1', function (d, i) {
+		     				                        return x(d.date);
+		     				                    })
+		     				                    .attr('y1', function (d, i) {
+		     				                        return height;
+		     				                    })
+		     				                    .attr('x2', function (d, i) {
+		     				                        return x(d.date);
+		     				                    })
+		     				                    .attr('y2', function (d, i) {
+		     				                        return height;
+		     				                    })
+		     				                    .style('stroke', pathColor)
+		     				                    .style('stroke-dasharray', '4,2')
+		     				                    .style('shape-rendering', 'crispEdges');
+		     				            guide
+		     				                .transition()
+		     				                    .duration(1000)
+		     				                    .delay(function(d, i) { return i * 150; })
+		     				                    .attr('y2', function (d, i) {
+		     				                        return y(d.alpha);
+		     				                    });
+		     				            var points = svg.insert('g')
+		     				                .selectAll('.d3-line-circle')
+		     				                .data(dataset)
+		     				                .enter()
+		     				                .append('circle')
+		     				                    .attr('class', 'd3-line-circle d3-line-circle-medium')
+		     				                    .attr("cx", line.x())
+		     				                    .attr("cy", line.y())
+		     				                    .attr("r", 3)
+		     				                    .style({
+		     				                        'stroke': pointerLineColor,
+		     				                        'fill': pointerBgColor
+		     				                    });
+		     				            points
+		     				                .style('opacity', 0)
+		     				                .transition()
+		     				                    .duration(250)
+		     				                    .ease('linear')
+		     				                    .delay(1000)
+		     				                    .style('opacity', 1);
+		     				            points
+		     				                .on("mouseover", function (d) {
+		     				                    tooltip.offset([-10, 0]).show(d);
+		     				                    d3.select(this).transition().duration(250).attr('r', 4);
+		     				                })
+		     				                .on("mouseout", function (d) {
+		     				                    tooltip.hide(d);
+		     				                    d3.select(this).transition().duration(250).attr('r', 3);
+		     				                });
+		     				            d3.select(points[0][0])
+		     				                .on("mouseover", function (d) {
+		     				                    tooltip.offset([0, 10]).direction('e').show(d);
+		     				                    d3.select(this).transition().duration(250).attr('r', 4);
+		     				                })
+		     				                .on("mouseout", function (d) {
+		     				                    tooltip.direction('n').hide(d);
+		     				                    d3.select(this).transition().duration(250).attr('r', 3);
+		     				                });
+		     				            d3.select(points[0][points.size() - 1])
+		     				                .on("mouseover", function (d) {
+		     				                    tooltip.offset([0, -10]).direction('w').show(d);
+		     				                    d3.select(this).transition().duration(250).attr('r', 4);
+		     				                })
+		     				                .on("mouseout", function (d) {
+		     				                    tooltip.direction('n').hide(d);
+		     				                    d3.select(this).transition().duration(250).attr('r', 3);
+		     				                });
+		     				            $(window).on('resize', lineChartResize);
+		     				            $(document).on('click', '.sidebar-control', lineChartResize);
+		     				            function lineChartResize() {
+		     				                width = d3Container.node().getBoundingClientRect().width - margin.left - margin.right;
+		     				                container.attr("width", width + margin.left + margin.right);
+		     				                svg.attr("width", width + margin.left + margin.right);
+		     				                x.range([padding, width - padding]);
+		     				                clipRect.attr("width", width);
+		     				                svg.selectAll('.d3-line').attr("d", line(dataset));
+		     				                svg.selectAll('.d3-line-circle').attr("cx", line.x());
+		     				                svg.selectAll('.d3-line-guides')
+		     				                    .attr('x1', function (d, i) {
+		     				                        return x(d.date);
+		     				                    })
+		     				                    .attr('x2', function (d, i) {
+		     				                        return x(d.date);
+		     				                    });
+		     				            }
+		     				        }
+		     				    };
+		     				    var _sparklinesWidget = function(element, chartType, qty, chartHeight, interpolation, duration, interval, color) {
+		     				        if (typeof d3 == 'undefined') {
+		     				            console.warn('Warning - d3.min.js is not loaded.');
+		     				            return;
+		     				        }
+		     				        if(element) {
+		     				            var d3Container = d3.select(element),
+		     				                margin = {top: 0, right: 0, bottom: 0, left: 0},
+		     				                width = d3Container.node().getBoundingClientRect().width - margin.left - margin.right,
+		     				                height = chartHeight - margin.top - margin.bottom;
+		     				            var data = [];
+		     				            for (var i=0; i < qty; i++) {
+		     				                data.push(Math.floor(Math.random() * qty) + 5);
+		     				            }
+		     				            var x = d3.scale.linear().range([0, width]);
+		     				            var y = d3.scale.linear().range([height - 5, 5]);
+		     				            x.domain([1, qty - 3]);
+		     				            y.domain([0, qty]);
+		     				            var line = d3.svg.line()
+		     				                .interpolate(interpolation)
+		     				                .x(function(d, i) { return x(i); })
+		     				                .y(function(d, i) { return y(d); });
+		     				            var area = d3.svg.area()
+		     				                .interpolate(interpolation)
+		     				                .x(function(d,i) { 
+		     				                    return x(i); 
+		     				                })
+		     				                .y0(height)
+		     				                .y1(function(d) { 
+		     				                    return y(d); 
+		     				                });
+		     				            var container = d3Container.append('svg');
+		     				            var svg = container
+		     				                .attr('width', width + margin.left + margin.right)
+		     				                .attr('height', height + margin.top + margin.bottom)
+		     				                .append("g")
+		     				                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		     				            var clip = svg.append("defs")
+		     				                .append("clipPath")
+		     				                .attr('id', function(d, i) { return "load-clip-" + element.substring(1); });
+		     				            var clips = clip.append("rect")
+		     				                .attr('class', 'load-clip')
+		     				                .attr("width", 0)
+		     				                .attr("height", height);
+		     				            clips
+		     				                .transition()
+		     				                    .duration(1000)
+		     				                    .ease('linear')
+		     				                    .attr("width", width);
+		     				            var path = svg.append("g")
+		     				                .attr("clip-path", function(d, i) { return "url(#load-clip-" + element.substring(1) + ")"; })
+		     				                .append("path")
+		     				                    .datum(data)
+		     				                    .attr("transform", "translate(" + x(0) + ",0)");
+		     				            if(chartType == "area") {
+		     				                path.attr("d", area).attr('class', 'd3-area').style("fill", color); // area
+		     				            }
+		     				            else {
+		     				                path.attr("d", line).attr("class", "d3-line d3-line-medium").style('stroke', color); // line
+		     				            }
+		     				            path
+		     				                .style('opacity', 0)
+		     				                .transition()
+		     				                    .duration(500)
+		     				                    .style('opacity', 1);
+		     				            setInterval(function() {
+		     				                data.push(Math.floor(Math.random() * qty) + 5);
+		     				                data.shift();
+		     				                update();
+		     				            }, interval);
+		     				            function update() {
+		     				                path
+		     				                    .attr("transform", null)
+		     				                    .transition()
+		     				                        .duration(duration)
+		     				                        .ease("linear")
+		     				                        .attr("transform", "translate(" + x(0) + ",0)");
+		     				                if(chartType == "area") {
+		     				                    path.attr("d", area).attr('class', 'd3-area').style("fill", color);
+		     				                }
+		     				                else {
+		     				                    path.attr("d", line).attr("class", "d3-line d3-line-medium").style('stroke', color);
+		     				                }
+		     				            }
+		     				            $(window).on('resize', resizeSparklines);
+		     				            $(document).on('click', '.sidebar-control', resizeSparklines);
+		     				            function resizeSparklines() {
+		     				                width = d3Container.node().getBoundingClientRect().width - margin.left - margin.right;
+		     				                container.attr("width", width + margin.left + margin.right);
+		     				                svg.attr("width", width + margin.left + margin.right);
+		     				                x.range([0, width]);
+		     				                clips.attr("width", width);
+		     				                svg.select(".d3-line").attr("d", line);
+		     				                svg.select(".d3-area").attr("d", area);
+		     				            }
+		     				        }
+		     				    };
+		     				    return {
+		     				        init: function() {
+		     				            _barChartWidget("#chart_bar_color", 24, 50, true, "elastic", 1200, 50, "rgba(255,255,255,0.75)", "members");
+		     				            _lineChartWidget('#line_chart_color', 50, '#fff', 'rgba(255,255,255,0.5)', '#fff', '#29B6F6');
+		     				            _sparklinesWidget("#sparklines_color", "area", 30, 50, "basis", 750, 2000, "rgba(255,255,255,0.75)");
+		     				            _sparklinesWidget("#sparklines_color21", "area", 30, 50, "basis", 750, 2000, "rgba(255,255,255,0.75)");
+		     				        }
+		     				    }
+		     				}();
+							     				
+				  		//]]>  
+					</script>
+				</f:verbatim>
+         	</ui:define> 
+      	</ui:composition> 
+   	</h:body> 
+</html>	

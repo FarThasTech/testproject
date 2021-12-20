@@ -1,0 +1,976 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+	
+	<h:head>
+     	<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" />
+		<title>DBOX - #{mainUtil.getInfoFromProperty('App_Name')}</title>
+		<link rel="icon" type="image/x-icon" href="/resources/assets/img/favicon.ico"/>
+    		<link rel="stylesheet" type="text/css" href="/resources/assets/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="/resources/assets/css/skin_color.css" />
+		<link rel="stylesheet" type="text/css" href="/resources/assets/css/color_theme.css" />
+		<link rel="stylesheet" type="text/css" href="/resources/assets/css/vendors_css.css" />
+		<link rel="stylesheet" type="text/css" href="/resources/assets/css/dbox.css" />
+				
+		<!-- Vendor JS -->
+		<script src="/resources/assets/js/vendors.min.js"></script>
+		<script src="/resources/assets/js/template.js"></script>
+		<script src="/resources/assets/vendor_components/bootstrap-select/dist/js/bootstrap-select.js"></script>
+		
+		<script src="/resources/assets/js/iban.js"></script>				
+		<script src="/resources/assets/js/pages/validation.js"></script>
+   		<script src="/resources/assets/js/pages/form-validation.js"></script>
+   	
+	</h:head>
+  		
+  	<body style="background: #ececec;" class="#{messages.direction}">
+  		<div id="loader" style="opacity: 0.5;" />
+	    <div>
+	  		<div class="container-full col-md-10 offset-md-1">
+				<!-- Content Header (Page header) -->
+				<!-- Main content -->
+				<section class="content">
+					<div class="row">			
+					    <!-- <div class="col-12">
+							<div class="box pull-up">
+								<div class="box-body bg-img bg-primary-light">
+									<div class="d-lg-flex align-items-center justify-content-between">
+										<div class="d-lg-flex align-items-center mb-30 mb-xl-0 w-p80">
+											<img src="https://www.multipurposethemes.com/admin/eduadmin-template/bs5/images/svg-icon/color-svg/custom-14.svg" class="img-fluid max-w-100" alt=""/>
+											<div class="ms-30">
+												<h2 class="mb-10">Masjid Constructions in German</h2>
+											</div>
+										</div>
+										<div>
+											<button type="button" class="waves-effect waves-light w-p100 btn btn-primary-light btn-lg" style="white-space: nowrap;cursor: revert;font-weight: 700;">50 $</button>
+										</div>
+									</div>							
+								</div>
+							</div>
+						</div> --> 
+					
+				  		<div class="col-lg-7 col-md-12 ">
+	  						<div class="box">
+								<!-- /.box-header -->
+								<h:form class="form">
+									<input type="hidden" id="activeLocale" name="activeLocale" value="#{localeSelector.localeString}" />
+	    							<c:set scope="request" value="#{donationCart.currencies.currencyCode}" var="currencyCode"/>
+	    							<c:set scope="request" value="#{donationCart.currencies.currencySymbol}" var="currencySymbol"/>
+									<div class="box-body">
+										<div class="d-lg-flex align-items-center justify-content-between bg-primary-light">
+											<div class="d-lg-flex align-items-center mb-30 mb-xl-0 w-p15">
+												<img src="#{donationCart.companyLogo}" class="img-fluid max-w-100" alt=""/>
+											</div>
+											<div style="text-align: center;">
+												<h2 class="mt-10">#{donationCart.campaignName} </h2>
+											</div>
+											<div>
+												<button type="button" class="waves-effect waves-light w-p100 btn btn-primary-light btn-lg" style="white-space: nowrap;cursor: revert;font-weight: 700;">
+													${currencyCode ne 'EUR' ? currencySymbol : ''} 
+													<span id="headerAmount">#{donationCart.firstAmountStr} </span>
+													${currencyCode eq 'EUR' ? currencySymbol : ''}
+												</button>
+											</div>
+										</div>	
+										<hr class="my-15" />
+										<div class="progress-border-style">
+										 	<div class="progress">
+												<div class="progress-bar progress-bar-danger progress-bar-striped progress-bar-animated" role="progressbar" 
+													aria-valuenow="#{donationCart.progressValue}" aria-valuemin="0" aria-valuemax="100" style="width: #{donationCart.progressValue}%">
+												  	<span class=""></span>
+												</div>
+										  	</div>
+										  	<div style="text-align: center;margin-top: -15px;font-size: 1.5rem !important;font-weight: 600 !important;">
+									  			<span class="">#{donationCart.progressValue}% #{messages.Collected}</span>
+									  		</div>
+								  		</div>
+								  		<hr class="my-15" />
+										<div class="row">
+										  	<div class="col-md-12">
+										  		<div class="form-group">
+													<h4 class="box-title text-info mb-0" style="margin-left: -15px;"><i class="ti-user me-15"></i> #{messages.Choose_Amount}</h4>
+													<hr class="my-15" />
+													<ul class="nav nav-pills mb-20">
+														<li class=" nav-item tabwidthAmt" style="padding: 5px;">
+														 	<a href="#navpills2-1" class="nav-link active" data-bs-toggle="tab" aria-expanded="false" onclick="updateAmount( #{donationCart.firstAmount});">
+														 		${currencyCode ne 'EUR' ? currencySymbol : ''} #{donationCart.firstAmountStr} ${currencyCode eq 'EUR' ? currencySymbol : ''}
+														 	</a> 
+													 	</li>
+														<li class="nav-item tabwidthAmt" style="padding: 5px;">
+														 	<a href="#navpills2-2" class="nav-link" data-bs-toggle="tab" aria-expanded="false" onclick="updateAmount( #{donationCart.secondAmount});">
+														 		${currencyCode ne 'EUR' ? currencySymbol : ''} #{donationCart.secondAmountStr} ${currencyCode eq 'EUR' ? currencySymbol : ''}
+														 	</a>
+													 	</li>
+														<li class="nav-item tabwidthAmt" style="padding: 5px;">
+														 	<a href="#navpills2-3" class="nav-link" data-bs-toggle="tab" aria-expanded="true" onclick="updateAmount( #{donationCart.thirdAmount});">
+														 		${currencyCode ne 'EUR' ? currencySymbol : ''} #{donationCart.thirdAmountStr} ${currencyCode eq 'EUR' ? currencySymbol : ''}
+														 	</a> 
+														</li>
+														<li class="nav-item tabwidthAmt" style="padding: 5px;"> 
+															<a href="#navpills2-4" class="nav-link" data-bs-toggle="tab" aria-expanded="true" onclick="updateAmount( #{donationCart.fourthAmount});">
+																${currencyCode ne 'EUR' ? currencySymbol : ''} #{donationCart.fourthAmountStr} ${currencyCode eq 'EUR' ? currencySymbol : ''}
+															</a> 
+														</li>
+														<li class="nav-item inputwidth" style="padding: 5px;"> 
+															<span class="nav-link" data-bs-toggle="tab" aria-expanded="true" style="border: 1px solid #adb8c1 !important;">
+																<input type="text" class="form-control" placeholder="#{messages.Other_Amount}" value="#{donationCart.amount}"
+																 	id="inputamount" name="inputamount" onchange="this.value=validateValue(this.value);updateInputAmount(this.value);"/>
+															</span>
+														</li>
+													</ul>
+									 			</div>
+											</div>
+									 	</div>
+										<hr class="my-15" />
+									 	<div class="row" style="#{donationCart.monthlyDonation ? '' : 'display:none;'}">
+										  	<div class="col-md-12">
+										  		<div class="form-group">
+													<h4 class="box-title text-info mb-0" style="margin-left: -15px;">
+														<i class="ti-user me-15"></i> #{messages.How_Often_Give}
+													</h4>
+													<hr class="my-15" />
+													<ul class="nav nav-pills mb-20">
+														<ui:repeat var="recurring" value="#{donationCart.prodSubTypeList}" varStatus="status">
+															<li class="nav-item recurringwidth" style="padding: 5px;" onclick="changeProductType('#{recurring.subTypeName}');">
+																<a href="#" class="nav-link #{status.index eq 0 ? 'active' : ''}" data-bs-toggle="tab" aria-expanded="false">
+																	<i class="fa fa-calendar"></i> #{messages['Module_'.concat(recurring.subTypeName)]}
+																</a> 
+															</li>
+														</ui:repeat>
+														<!-- <li class="nav-item recurringwidth" style="padding: 5px;" onclick="changeProductType('Recurring');"> 
+															<a href="#" class="nav-link" data-bs-toggle="tab" aria-expanded="false">
+																<i class="fa fa-check-square-o"></i> #{messages.Monthly}
+															</a> 
+														</li> -->
+													</ul>
+										 		</div>
+											</div>
+									 	</div>
+									 	
+									 	<h4 class="box-title text-info mb-0" style="margin-left: -15px;"><i class="ti-user me-15"></i> #{messages.Personal_Details}</h4>
+										<hr class="my-15" />
+										 
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+											  		<label class="form-label">#{messages.Name} <span class="text-danger">*</span></label>
+											  		<div class="controls">
+												  		<input type="text" class="form-control" id="name" placeholder="#{messages.Name}" 
+												  			onchange="ValidateName(this.value);" required="required" />
+											  			<span id="nameNullValidaion" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+											  		</div>
+												</div>
+									  		</div>
+										  	<div class="col-md-6">
+												<div class="form-group">
+											  		<label class="form-label">#{messages.Email} <span class="text-danger">*</span></label>
+											  		<div class="controls">
+												  		<input type="text" class="form-control" id="email" placeholder="#{messages.Email}" 
+												  			onchange="ValidateEmail(this.value);" required="required" />
+												  		<span id="emailNullValidaion" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+												  		<span id="emailValidaion" style="display: none;">#{messages.Please_Enter_Valid_Email}</span> 
+											  		</div>
+												</div>
+										  	</div>
+										</div>
+									
+										<div class="row">
+											<div class="col-md-4" style="#{donationCart.phoneShow ? '' : 'display:none;'}">
+												<div class="form-group">
+											  		<label class="form-label">#{messages.Telephone} <span class="text-danger" style="#{donationCart.phoneRequired ? '' : 'display:none;'}">*</span></label>
+											  		<div class="controls">
+											  			<input type="text" class="form-control" id="phone" placeholder="#{messages.Telephone}" required="required" />
+											  			<span id="phoneNullValidaion" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+											  		</div>
+												</div>
+										  	</div>
+											<div class="col-md-4"  style="#{donationCart.addressShow ? '' : 'display:none;'}">
+												<div class="form-group">
+											  		<label class="form-label">#{messages.Address} <span class="text-danger" style="#{donationCart.addressRequired ? '' : 'display:none;'}">*</span></label>
+											  		<div class="controls">
+											  			<input type="text" class="form-control" id="route" placeholder="#{messages.Address}" required="required" />
+											  			<span id="streetNullValidaion" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+											  		</div>
+												</div>
+										  	</div>
+										  	<div class="col-md-4"  style="#{donationCart.addressShow ? '' : 'display:none;'}">
+												<div class="form-group">
+											  		<label class="form-label">#{messages.Number_Short} <span class="text-danger" style="#{donationCart.addressRequired ? '' : 'display:none;'}">*</span></label>
+											  		<div class="controls">
+											  			<input type="text" class="form-control" id="street_number" placeholder="#{messages.Number_Short}" required="required" />
+											  			<span id="houseNoNullValidaion" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+											  		</div>
+												</div>
+										  	</div>
+										 </div> 
+									 
+										 <div class="row" style="#{donationCart.addressShow ? '' : 'display:none;'}">
+										 	<div class="col-md-4">
+												<div class="form-group">
+											  		<label class="form-label">#{messages.City} <span class="text-danger" style="#{donationCart.addressRequired ? '' : 'display:none;'}">*</span></label>
+											  		<div class="controls">
+											  			<input type="text" class="form-control" id="locality" placeholder="#{messages.City}" required="required" />
+											  			<span id="cityNullValidaion" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+											  		</div>
+												</div>
+										  	</div>
+										  	<div class="col-md-4">
+												<div class="form-group">
+											  		<label class="form-label">#{messages.Country} <span class="text-danger" style="#{donationCart.addressRequired ? '' : 'display:none;'}">*</span></label>
+											  		<div class="controls">
+											  			<input type="text" class="form-control" id="country" placeholder="#{messages.Country}" required="required" />
+											  			<span id="countryNullValidaion" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+											  		</div>
+												</div>
+										  	</div>
+										  	<div class="col-md-4">
+												<div class="form-group">
+											  		<label class="form-label">#{messages.PinCode} <span class="text-danger" style="#{donationCart.addressRequired ? '' : 'display:none;'}">*</span></label>
+											  		<div class="controls">
+											  			<input type="text" class="form-control" id="postal_code" placeholder="#{messages.PinCode}" required="required" />
+											  			<span id="zipNullValidaion" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+											  		</div>
+												</div>
+										  	</div>
+										 </div> 
+									 
+									</div>  
+						
+									<div class="box-body">
+										<h4 class="box-title text-info mb-0" style="margin-left: -15px;"><i class="ti-user me-15"></i> #{messages.PaymentMethod}</h4>
+										<hr class="my-15" />
+										<div class="row">
+										  	<div class="col-md-12">
+										  		<div class="form-group">
+													<ul class="nav nav-pills mb-20">
+														<ui:repeat value="#{donationCart.payMethodList}" var="pay" varStatus="status">
+															<li class="nav-item tabwidth" id="#{pay.paymentType.paymentName}_li" style="padding: 5px;"
+																onclick="changePayMethod('#{pay.paymentType.id}','#{pay.paymentType.paymentName}','#{pay.id}');" > 
+																<a href="#navpills2-1" id="#{pay.paymentType.paymentName}_lia" 
+																 	class="payActive nav-link paytab #{status.index eq 0 ? 'active' : ''}" 
+																	data-bs-toggle="tab" aria-expanded="false" style="text-align: center;">
+																	<img src="/resources/assets/images/dbox/#{pay.paymentType.paymentName}.png"></img>
+																</a>
+														 	</li>
+													 	</ui:repeat>
+													</ul>
+										 		</div>
+										 
+											 	<div class="row" id="Sepa_div" style="display: none;">
+													<div class="col-md-6">
+														<div class="form-group">
+													  		<label class="form-label">#{messages.Acc_Holder_Name} <span class="text-danger">*</span></label>
+													  		<div class="controls">
+													  			<input type="text" class="form-control" id="sepaAccName" placeholder="#{messages.Acc_Holder_Name}"
+													  			 onchange="validateAccName(this.value);" required="required" />
+													  			<span id="accNameNullValidaion" style="display: none;">#{messages.Account_Validation}</span>
+													  		</div>
+														</div> 
+												  	</div>
+												  	<div class="col-md-6">
+														<div class="form-group">
+													  		<label class="form-label">#{messages.Iban} <span class="text-danger">*</span></label>
+													  		<div class="controls">
+														  		<input type="text" name="iban" class="form-control" id="sepaIban" placeholder="#{messages.Iban}"
+														  			onblur="this.value=removeSpace(this.value);validateIban(this.value)" 
+																	onkeyup="this.value=removeSpace(this.value);this.value=this.value.replace(/\s/g, '')" required="required" /> 
+													  			<span id="ibanValidaion" style="display: none;">#{messages.IBAN_Validation}</span> 
+													  		</div>
+														</div>
+												  	</div>
+												</div>
+												<div class="row" id="CreditCard_div" style="display: none;">
+													<div class="col-md-12">
+														<div class="form-group">
+													  		<label class="labelStripe" style="width: 100%;">
+												                <div id="card-element" class="stripefield" />
+												        	</label>
+														</div>
+												  	</div>
+												  	<div class="outcomeStripe">
+														<div class="errorStripe" role="alert"></div>
+											     	</div>
+												</div>
+											</div>
+											<div class="col-12">
+											  	<div class="checkbox">
+													<input type="checkbox" onclick="updateTrans(this);" id="basic_checkbox_1" checked="checked" />
+													<label for="basic_checkbox_1"> #{messages.Transaction_TakenOver_Msg}</label>
+											  	</div>
+											</div>
+							 			</div>
+									</div>
+								  	<div class="box-footer" style="text-align: center;border-top: none;">
+								 		<button type="button" class="waves-effect waves-light btn btn-danger btn-lg" style="color: white;" id="confirmButton" onclick="persistDbox();">
+								 			#{messages.Confirm_Your_Donation}
+								 			<span>
+								 				${currencyCode ne 'EUR' ? currencySymbol : ''}
+								 				<span id="finalAmount"> 
+								 					#{donationCart.firstAmountStr}
+							 					</span> 
+							 					${currencyCode eq 'EUR' ? currencySymbol : ''}
+								 			</span> 
+								 		</button>
+									</div>
+								</h:form>
+							</div>
+						</div>
+	
+	
+						<div class="col-lg-5 col-md-12 ">
+							<div class="box overflow-hidden">
+								<img src="#{donationCart.campaignImage}" alt=""/>
+								<hr class="my-15" style="#{donationCart.campaignImage ne null and donationCart.campaignImage != '' ? '' : 'display: none;' }"/>
+							  	<div class="box-body">
+									<h4><a href="#">#{messages.About} #{donationCart.campaignName}</a></h4>
+									<!-- <p>October 19, 2018</p> -->
+									<div id="updateDescription"></div>
+							  	</div>
+							</div>
+						</div>
+  					</div>
+				</section>
+		  	</div>
+		  	<input type="hidden" value="#{donationCart.prodGroupId}" id="prodGroupId" />
+		  	<input type="hidden" value="#{donationCart.companyId}" id="companyId" />
+		  	<input type="hidden" value="#{donationCart.userId}" id="userId" />
+		  	<input type="hidden" value="#{donationCart.loggedIn}" id="loggedIn" />
+		  	<input type="hidden" value="#{donationCart.langCode}" id="langCode" />
+		  	<input type="hidden" value="#{donationCart.amount}" id="totalAmount" />
+		  	<input type="hidden" id="eucardcountrycodes" value="#{stripeBean.europeCountryCodes}"/>
+			<input type="hidden" id="otherCardFee" value="#{stripeBean.otherCardFee}"/>
+		  	<input type="hidden" value="${currencyCode}" id="currCode" />
+		  	<input type="hidden" value="${currencySymbol}" id="currSymbol" />
+		  	<script src="https://js.stripe.com/v3/"/>
+	  	</div>
+	  	<f:verbatim>
+			<script type="text/javascript">
+     			//<![CDATA[
+					
+     				setTimeout( function() { loadDatas(); }, 1000);
+					
+     				var hotUrl = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
+     				var addressShow, addressRequired, phoneShow, phoneRequired;
+     				var payList, paymentMethodId, payTypeId, payTypeNameStr, payMethodAvail, payTypeAndFee, transTakenOver, prodSubTypeName;
+					var productType;
+					var stripeToken = '';
+					var stripePubkey = '';
+					var cardCountryCode = '';
+					
+     				var prodGroupId = $("#prodGroupId").val();
+					var loggedIn = $("#loggedIn").val();
+					var langCode = $("#langCode").val();
+					var totalAmount = $("#totalAmount").val();
+					
+					function loadDatas(){
+						blockUI();
+						resetData();
+						$.ajax({
+				    		type: 'post',
+				    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:donationCart.loadProdGroupDescription()',
+				    		data: { prodGroupId: prodGroupId,
+				    			loggedIn: loggedIn,
+				    			langCode: langCode},
+			    			success: function(res) {
+			    				var result= res.split('\n', 1);
+			     	 			var parseProdData = JSON.parse(result[0]);
+			     	 			
+			     	 			/************* Description **************/
+			     	 			var description = parseProdData.description;
+		    				 	$("#updateDescription").html(description);
+		    				 	
+		    				 	/************* Stripe Key ***************/
+		    				 	stripePubkey = parseProdData.stripePubkey;
+		    				 	
+		    				 	/************ Payment Method ************/
+		    				 	payList = parseProdData.payList; 
+		    				 	var firstPay = true;
+		    				 	payMethodAvail = false;
+		    				 	$('#confirmButton').prop('disabled','disabled');
+		    				 	paymentMethodId = 0;
+		    				 	$.each(payList, function(j, option) {
+		    				 		if(firstPay){
+		    				 			$('#confirmButton').removeAttr("disabled");
+		    				 			payMethodAvail = true;
+		    				 			paymentMethodId = option.payMethodId; 
+		    				 			payTypeId = option.payTypeId;
+
+		    				 			var payTypeName = option.payTypeName;
+		    				 			payTypeNameStr = payTypeName;
+		    				 			$("#Sepa_div").attr("style","display: none;");
+		    							$("#CreditCard_div").attr("style","display: none;");
+		    							
+		    					    	if(payTypeName == 'Sepa'){
+		    					    		$("#Sepa_div").attr("style","display: ;");
+		    					    	}else if(payTypeName == 'CreditCard'){
+		    					    		$("#CreditCard_div").attr("style","display: ;");
+		    					    		createCreditCard();
+		    					    	}
+		    							firstPay = false;	
+		    						}
+	    				 	 	});
+		    				 	
+		    				 	payTypeAndFee = parseProdData.payTypeAndFee;
+		    				 	transTakenOver = true;
+		    				 	addressShow = parseProdData.addressShow; 
+		    				 	addressRequired = parseProdData.addressRequired; 
+		    				 	phoneShow = parseProdData.phoneShow; 
+		    				 	phoneRequired = parseProdData.phoneRequired;
+		    				 	updateAmountInConfirmButton();
+								prodSubTypeName = parseProdData.prodSubTypeName;
+								
+		    				 	if(prodSubTypeName != null && prodSubTypeName != '' && prodSubTypeName.trim().length > 0) {
+		    				 		changeProductType(prodSubTypeName);
+			    				}
+		    				 	unblockUI();
+				  	       	}
+				    	});
+					}
+					
+					function resetData(){
+						$("#name").val('');
+						$("#email").val('');
+						$("#phone").val('');
+						$("#route").val('');
+						$("#street_number").val('');
+						$("#locality").val('');
+						$("#country").val('');
+						$("#postal_code").val('');
+						$("#sepaAccName").val('');
+						$("#sepaIban").val('');
+					}
+					
+					function updateAmount(amount){
+						totalAmount = amount;
+						updateAmountInConfirmButton();
+					}
+					
+					function updateInputAmount(amount){
+						amount = amount.replace( /\D+$/, '');
+					 	document.getElementById("inputamount").value = amount ;
+					 	if(amount.length == 0 || amount == '0'){
+					 		amount = 1;
+						}
+					 	totalAmount = amount;
+					 	updateAmountInConfirmButton();
+					}
+					
+					function updateTrans(val){
+						transTakenOver = val.checked;
+						updateAmountInConfirmButton();
+					}
+					
+					function updateAmountInConfirmButton(){
+						
+						var consolidateAmount = parseFloat(totalAmount);
+						
+						if(transTakenOver) {
+							var payAndAppFee = payTypeAndFee[payTypeId];
+							var paymentFeePattern = payAndAppFee.PayFee;
+							var feeTOPattern = payAndAppFee.FeeTO;
+							var feeNTOPattern = payAndAppFee.FeeNTO;
+							if(payTypeNameStr == 'CreditCard' && cardCountryCode){
+						 		var NonEUFee = $('#otherCardFee').val();
+						 		var eucc = $('#eucardcountrycodes').val();
+						 		var euccArr = eucc.replace('[','').replace(']','').split(",");
+						 		var nonEurope = true;
+						 		for (let i = 0; i < euccArr.length; i++) {
+						 			var euCode = euccArr[i];
+						 			if(euCode.trim() === cardCountryCode.trim()){
+						 				nonEurope = false;
+						 			}
+					 			}
+						 		if(nonEurope){
+						 			paymentFeePattern = NonEUFee;
+						 		}
+						 	}
+							
+							var paymentFee = paymentAndAppFeeCalculation(totalAmount, paymentFeePattern);
+							var applicationFee = paymentAndAppFeeCalculation(totalAmount, feeTOPattern);
+							consolidateAmount = parseFloat(totalAmount) + parseFloat(paymentFee) + parseFloat(applicationFee);
+						}
+						
+						var formatted = new Intl.NumberFormat(langCode, { style: 'currency', currency: $("#currCode").val() }).format(consolidateAmount);
+						var currSymbol = $("#currSymbol").val();
+						formatted = formatted.replace(currSymbol,'');
+						$("#finalAmount").text(formatted);
+						$("#headerAmount").text(formatted);
+					}
+					
+				 	function paymentAndAppFeeCalculation(amount, feepattern){
+				 		var percentage, cents, fee = 0;
+						var split1 = feepattern.split('+');
+						if(split1.length == 2){
+							var split2 = split1[0].split('%');
+						 	percentage = parseFloat(split2[0].trim());
+						 	cents = parseFloat(split1[1].trim());
+						 	amount = parseFloat(amount);
+						 	if(amount > 0){
+								if(percentage > 0) {
+									fee = (amount * percentage / 100);
+								}
+								if(cents > 0) {
+									fee = fee + cents;
+								}
+							}
+					 	}
+						return fee;
+					}
+					
+					$('input[name="inputamount"]').on('input', function(){
+						var val  = $(this).val().replace(/[^+0-9.]/g,'');
+						$(this).val(val);
+					});
+					
+					function validateValue(value){
+				 		if(value.length == 0){
+					 		return 1;
+						}else if(value < 1){
+					 		return 1;
+						}else{ 
+							value = value.replace(',','.');
+							value = value.replace( /\D+$/, '');
+					 	 	value = value.replace(/[^+0-9\.]/, '');
+					 	 	value = value.replace(/\b0+/g, "");
+					 	 	if(value.includes(".")){
+					 			value = parseFloat(value).toFixed(2);
+					 	 	}
+						}
+					 	if(value.length == 0 || isNaN(value)){
+					 		return 1;
+						}else if(value < 1){
+					 		return 1;
+						}else{ 
+					 	 	return value; 
+						}    	
+					 }
+					
+					function changePayMethod(pTypeId, payTypeName, payMethodId){
+						
+						paymentMethodId = payMethodId; 
+			 			payTypeId = pTypeId;
+			 			payTypeNameStr = payTypeName;
+			 			
+						$("#Sepa_div").attr("style","display: none;");
+						$("#CreditCard_div").attr("style","display: none;");
+ 					    if(payTypeName == 'Sepa'){
+ 					    	$("#Sepa_div").attr("style","display: ;");
+ 					    }else if(payTypeName == 'CreditCard'){
+ 					    	$("#CreditCard_div").attr("style","display: ;");
+ 					    	createCreditCard();
+ 					    }
+ 					   	updateAmountInConfirmButton();
+					}
+					
+					function createCreditCard(){
+				    	if(stripePubkey){
+			     			var stripe = Stripe(stripePubkey);
+					     	var elements = stripe.elements();
+					     	card = elements.create('card', {
+			     		  		hidePostalCode: true,
+					     		style: {
+					     			base: {
+					     		    	iconColor: '#F99A52',
+					     		      	color: '#32315E',
+					     		      	lineHeight: '48px',
+					     		      	fontWeight: 400,
+					     		      	fontFamily: '"Helvetica Neue", "Helvetica", sans-serif',
+					     		      	fontSize: '15px',
+					     		      	'::placeholder': {
+					     		        	color: '#5AF',
+					     		      	}
+				     		    	},
+				     		  	}
+			     			});
+					     	card.mount('#card-element');
+					     	card.on('change', function(event) {
+					     		stripe.createToken(card).then(function(result) {
+					     			var errorElement = document.querySelector('.errorStripe');
+					     			errorElement.classList.remove('visibleStripe');
+					     		    if (!result.error) {
+					     		    	cardCountryCode = result.token.card.country;
+					     		    	stripeToken = result.token.id;
+					     		    	$('#confirmButton').removeAttr("disabled");
+					     		    	updateAmountInConfirmButton();
+					     		    }else{
+					     		    	stripeToken = '';
+					     		    	errorElement.textContent = result.error.message;
+					     		        errorElement.classList.add('visibleStripe');
+					     		        $('#confirmButton').prop('disabled','disabled');
+					     		    }
+					     		});
+					     	});
+						}
+				     }
+					
+					function changeProductType(prodType){
+						productType = prodType;
+						var recurringType = false;
+						if(prodType == "Monthly"){
+							recurringType = true;
+						}
+						var firstPay = true;
+						$(".payActive").removeClass("active");
+						paymentMethodId = 0;
+						$.each(payList, function(j, option) {
+							var tempRecType = option.recurring;
+							var payTypeName = option.payTypeName;
+							if(recurringType){
+								if(tempRecType){
+									$("#"+payTypeName+"_li").attr("style","padding: 5px;");
+									if(firstPay){
+										payTypeNameStr = payTypeName;
+										$("#"+payTypeName+"_lia").addClass("active");
+		    				 			payMethodAvail = true;
+		    				 			paymentMethodId = option.payMethodId; 
+		    				 			payTypeId = option.payTypeId;
+		    				 			
+		    				 			$("#Sepa_div").attr("style","display: none;");
+		    							$("#CreditCard_div").attr("style","display: none;");
+		    					    	if(payTypeName == 'Sepa'){
+		    					    		$("#Sepa_div").attr("style","display: ;");
+		    					    	}else if(payTypeName == 'CreditCard'){
+		    					    		$("#CreditCard_div").attr("style","display: ;");
+		    					    		createCreditCard();
+		    					    	}
+		    							firstPay = false;	
+		    						}
+								}else{
+									$("#"+payTypeName+"_li").attr("style","display: none;");
+								}
+							}else{
+								$("#"+payTypeName+"_li").attr("style","padding: 5px;");
+								if(firstPay){
+									payTypeNameStr = payTypeName;
+									$("#"+payTypeName+"_lia").addClass("active");
+	    				 			payMethodAvail = true;
+	    				 			paymentMethodId = option.payMethodId; 
+	    				 			payTypeId = option.payTypeId;
+	    				 			
+	    				 			$("#Sepa_div").attr("style","display: none;");
+	    							$("#CreditCard_div").attr("style","display: none;");
+	    					    	if(payTypeName == 'Sepa'){
+	    					    		$("#Sepa_div").attr("style","display: ;");
+	    					    	}else if(payTypeName == 'CreditCard'){
+	    					    		$("#CreditCard_div").attr("style","display: ;");
+	    					    		createCreditCard();
+	    					    	}
+	    							firstPay = false;	
+	    						}
+							}
+				 	 	});
+					}
+					
+					function blockUI() {
+						$("#loader").attr("style","display: block;opacity: 0.5;");
+					}
+
+					function unblockUI() {
+						$("#loader").attr("style","display: none;");
+					}
+					
+					function persistDbox(){
+						var submit = true;
+						var companyId = $("#companyId").val();
+						var userId = $("#userId").val();
+						var langCode = $("#langCode").val();
+						var prodGroupId = $("#prodGroupId").val();
+						
+						var nameEL = $('#name');
+						var emailEL = $('#email');
+					 	
+					 	var phoneEL = $('#phone');
+					 	var streetEL = $('#route');
+					 	var houseNoEL = $('#street_number');
+					 	var cityEL = $('#locality');
+					 	var countryEL = $('#country');
+					 	var zipEL = $('#postal_code');
+					 	var sepaNameEL = $('#sepaAccName');
+					 	var sepaIbanEL = $('#sepaIban');
+						
+						var name = (nameEL != null && nameEL != "" && nameEL.length) ? nameEL.val().trim() : "";
+						var email = (emailEL != null && emailEL != "" && emailEL.length) ? emailEL.val().trim() : "";
+						var phone = (phoneEL != null && phoneEL != "" && phoneEL.length) ? phoneEL.val().trim() : "";
+						var street = (streetEL != null && streetEL != "" && streetEL.length) ? streetEL.val().trim() : "";
+						var houseNo = (houseNoEL != null && houseNoEL != "" && houseNoEL.length) ? houseNoEL.val().trim() : "";
+						var city = (cityEL != null && cityEL != "" && cityEL.length) ? cityEL.val().trim() : "";
+						var country = (countryEL != null && countryEL != "" && countryEL.length) ? countryEL.val().trim() : "";
+						var zip = (zipEL != null && zipEL != "" && zipEL.length) ? zipEL.val().trim() : "";
+						var sepaAccName = (sepaNameEL != null && sepaNameEL != "" && sepaNameEL.length) ? sepaNameEL.val().trim() : "";
+						var sepaIban = (sepaIbanEL != null && sepaIbanEL != "" && sepaIbanEL.length) ? sepaIbanEL.val().trim() : "";
+						
+						$('#emailValidaion').attr('style','display: none;');
+		 		    	$('#emailNullValidaion').attr('style','display: none;');
+		 		    	$('#nameNullValidaion').attr('style','display: none;');
+		 		    	$('#phoneNullValidaion').attr('style','display: none;');
+		 		    
+		 		    	nameEL.attr('style', '');
+		 		    	emailEL.attr('style', '');
+		 		    	phoneEL.attr('style', '');
+		 		    	streetEL.attr('style', '');
+		 		    	houseNoEL.attr('style', '');
+		 		    	cityEL.attr('style', '');
+		 		    	countryEL.attr('style', '');
+		 		    	zipEL.attr('style', '');
+		 		    	sepaNameEL.attr('style', '');
+		 		    	sepaIbanEL.attr('style', '');
+
+		 		    	var gotoError = true;
+		 		    	
+					 	if (name == null || name == "") {
+					 		submit = false;
+					 		nameEL.attr('style', 'outline: 0;border-color: red;');
+					 		$('#nameNullValidaion').attr('style','display: ;color:red !important;font-size: 14px;float: right;');
+					 		if(gotoError){
+					 			gotoError = false;
+					 			scrollToEmpty(nameEL);
+					 		}
+					 	}
+					 	
+					 	if (email == null || email == "" || !ValidateEmail(email)) {
+							submit = false;
+					 		emailEL.attr('style', 'outline: 0;border-color: red;');
+					 		$('#emailNullValidaion').attr('style','display: ;color:red !important;font-size: 14px;float: right;');
+					 		if(gotoError){
+					 			gotoError = false;
+					 			scrollToEmpty(emailEL);
+					 		}
+					 	}
+					 	
+					 	if(phoneShow && phoneRequired && (phone == null || phone == "")){
+				       		submit = false;
+				       		phoneEL.attr('style', 'outline: 0;border-color: red !important;');
+				       		$('#phoneNullValidaion').attr('style','display: ;color:red !important;font-size: 14px;float: right;');
+				       		if(gotoError){
+					 			gotoError = false;
+				       			scrollToEmpty(phoneEL);
+				       		}
+				       	}
+					 	
+					 	if(addressShow && addressRequired){
+					 		
+					 		if((street == null || street == "")){
+					 			submit = false;
+					 			streetEL.attr('style', 'outline: 0;border-color: red !important;');
+					       		$('#streetNullValidaion').attr('style','display: ;color:red !important;font-size: 14px;float: right;');
+					       		if(gotoError){
+						 			gotoError = false;	
+					       			scrollToEmpty(streetEL);
+					       		}
+					 		}
+					 		
+					 		if((houseNo == null || houseNo == "")){
+					 			submit = false;
+					 			houseNoEL.attr('style', 'outline: 0;border-color: red !important;');
+					       		$('#houseNoNullValidaion').attr('style','display: ;color:red !important;font-size: 14px;float: right;');
+					       		if(gotoError){
+						 			gotoError = false;
+					       			scrollToEmpty(houseNoEL);
+					       		}
+					 		}
+					 		
+					 		if((city == null || city == "")){
+					 			submit = false;
+					 			cityEL.attr('style', 'outline: 0;border-color: red !important;');
+					       		$('#cityNullValidaion').attr('style','display: ;color:red !important;font-size: 14px;float: right;');
+					       		if(gotoError){
+						 			gotoError = false;
+					       			scrollToEmpty(cityEL);
+					       		}
+					 		}
+					 		
+					 		if((country == null || country == "")){
+					 			submit = false;
+					 			countryEL.attr('style', 'outline: 0;border-color: red !important;');
+					       		$('#countryNullValidaion').attr('style','display: ;color:red !important;font-size: 14px;float: right;');
+					       		if(gotoError){
+						 			gotoError = false;
+					       			scrollToEmpty(countryEL);
+					       		}
+					 		}
+					 		
+					 		if((zip == null || zip == "")){
+					 			submit = false;
+					 			zipEL.attr('style', 'outline: 0;border-color: red !important;');
+					       		$('#zipNullValidaion').attr('style','display: ;color:red !important;font-size: 14px;float: right;');
+					       		if(gotoError){
+						 			gotoError = false;
+					       			scrollToEmpty(zipEL);
+					       		}
+					 		}
+				       	}
+					 	if(paymentMethodId <= 0){
+					 		submit = false;
+					 	}
+					 	
+					 	if(payTypeNameStr == 'Sepa'){
+					 		if (sepaAccName == null || sepaAccName == "" || (sepaAccName != null && sepaAccName != '' && sepaAccName.trim().length < 3)) {
+					 			submit = false;
+					 			sepaNameEL.attr('style', 'outline: 0;border-color: red !important;');
+					       		$('#accNameNullValidaion').attr('style','display: ;color:red !important;font-size: 14px;float: right;');
+					       		if(gotoError){
+						 			gotoError = false;
+					       			scrollToEmpty(sepaNameEL);
+					       		}
+					 		}
+					 		
+							if (sepaIban == null || sepaIban == "" || (sepaIban != null && sepaIban != '' && !IBAN.isValid(sepaIban.trim()))) {
+								submit = false;
+								sepaIbanEL.attr('style', 'outline: 0;border-color: red !important;');
+					       		$('#ibanValidaion').attr('style','display: ;color:red !important;font-size: 14px;float: right;');
+					       		if(gotoError){
+						 			gotoError = false;
+					       			scrollToEmpty(sepaIbanEL);
+					       		}
+					 		}
+ 					    }
+					 	
+			 			if(submit){
+		 					var jsonData = JSON.stringify({"dBox": {
+					 				"UserId" : userId,
+					 				"CompanyId" : companyId,
+					 				"LangCode" : langCode,
+			 						"FirstName" : encodeURIComponent(name),
+				 					"Email" : encodeURIComponent(email),
+				 					"Phone" : phone,
+				 					"Street" : encodeURIComponent(street),
+				 					"HouseNo" : encodeURIComponent(houseNo),
+				 					"City" : encodeURIComponent(city),
+				 					"Country" : encodeURIComponent(country),
+				 					"PostalCode" : encodeURIComponent(zip),
+				 					"stripeSepaName" : encodeURIComponent(sepaAccName),
+				 					"stripeSepaIban" : sepaIban,
+				 					"stripeToken" : stripeToken,
+				 					"totalAmount": totalAmount,
+				 					"paymentMethodId" : paymentMethodId,
+				 					"payTypeId" : payTypeId,
+				 					"prodGroupId" : prodGroupId,
+				 					"productType" : productType,
+				 					"transTakenOver" : transTakenOver,
+				 					"cardCountryCode" : cardCountryCode
+				 				}
+					 		});
+		 					if(jsonData!=null && jsonData != ''){
+					 			blockUI();
+						    	var xmlhttp = new XMLHttpRequest(); 
+						    	xmlhttp.onreadystatechange = function() {
+			    		  			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { // when completed we can move away
+					    			 	//alert(xmlhttp.response);alert(xmlhttp.responseText);
+						    			var url = xmlhttp.response;
+						    			if(url && url.trim() != hotUrl.trim()){
+					    		    		window.location = url;
+						    			}else{
+					    					window.location = "/dboxResult.jsf?error=error";
+						    			}
+					    		  	}
+				    			}
+						    	var encodedData = btoa("dboxwebook:pwd");
+						    	xmlhttp.open("POST", "/DonationWebhook");
+						    	xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+						    	xmlhttp.setRequestHeader("Content-Type", "application/json");
+								xmlhttp.setRequestHeader("Content-Type", "utf-8");
+						    	xmlhttp.setRequestHeader("Authorization", 'Basic '+ encodedData);
+						    	xmlhttp.setRequestHeader("User-Agent", navigator.userAgent);
+						    	xmlhttp.send(jsonData);
+		 					}
+					    } else {
+					    	$('#confirmButton').prop('disabled','disabled');
+					    }
+				 	}
+					 
+			 		function scrollToEmpty(elem){
+						if(elem) {
+ 							// $(window).scrollTop( $("#email").offset().top );
+						    $('html').scrollTop(elem.offset().top);
+						}
+				 	}
+			 		
+			 		function ValidateName(name){
+			 			$('#nameNullValidaion').attr('style','display: none;');
+			 			if (name == null || name == "" || (name != null && name != '' && name.trim().length == 0)) {
+			 				$('#confirmButton').attr('disabled', 'disabled');
+			 				$('#nameNullValidaion').attr('style','display: ;color:red !important;font-size: 14px;float: right;');
+			 				$('#name').attr('style', 'outline: 0;border-color: red;');
+					 	}else{
+					 		$('#confirmButton').removeAttr("disabled");
+					 		$('#name').attr('style','');
+					 	}
+			 		}
+			 		
+			 		function ValidateEmail(email) {
+			 			$('#emailValidaion').attr('style','display: none;');
+		 		    	$('#emailNullValidaion').attr('style','display: none;');
+			 			if(email != null && email != ''){
+			 				email = email.trim();
+			 		    	var expr = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+			 		    	var validaddr = expr.test(email);
+			 		    	if(!validaddr){
+			 		    		$('#emailValidaion').attr('style','display: ;color:red !important;font-size: 14px;float: right;');
+			 		    		$('#email').attr('style', 'outline: 0;border-color: red;');
+			 					$('#confirmButton').attr('disabled', 'disabled');
+			 		    	}else{
+			 		    		$('#emailValidaion').attr('style','display:none');
+			 		    		$('#email').attr('style','');
+			 		    		$('#confirmButton').removeAttr("disabled");
+			 		    	}
+			 		        return validaddr;
+			 			}else{
+			 				$('#emailNullValidaion').attr('style','display: ;color:red !important;font-size: 14px;float: right;');
+			 				$('#email').attr('style', 'outline: 0;border-color: red;');
+			 				$('#confirmButton').attr('disabled', 'disabled');
+			 			}
+			 		}
+			 		
+			 		function removeSpace(value) {
+			 			return value.split(' ').join('');
+			 	 	}
+			 		
+			 		function validateIban(value){
+			 			var sepaIbanEL = $('#sepaIban');
+		 		    	sepaIbanEL.attr('style', '');
+			 			$('#ibanValidaion').attr('style','display: none;');
+			 			$('#confirmButton').removeAttr("disabled");
+			 			if (value == null || value == "" || (value != null && value != '' && value.trim().length == 0)) {
+			 				sepaIbanEL.attr('style', 'outline: 0;border-color: red !important;');
+			 				$('#ibanValidaion').attr('style','color: red !important;font-size: 14px;float: right;');
+			 				$('#confirmButton').prop('disabled', 'disabled');
+			 			}else{
+				 			if(IBAN.isValid(value)){
+				 				$('#ibanValidaion').attr('style','display: none !important');
+				 				$('#confirmButton').removeAttr("disabled");
+				 			}else{
+				 				sepaIbanEL.attr('style', 'outline: 0;border-color: red !important;');
+				 				$('#ibanValidaion').attr('style','color: red !important;font-size: 14px;float: right;');
+				 				$('#confirmButton').prop('disabled', 'disabled');
+				 			}
+			 			}
+			 		}
+			 		
+			 		function validateAccName(accName){
+			 			var sepaNameEL = $('#sepaAccName');
+		 		    	sepaNameEL.attr('style', '');
+			 			$('#accNameNullValidaion').attr('style','display: none !important');
+			 			$('#confirmButton').removeAttr("disabled");
+			 			if((accName == null) || (accName != null && accName.trim() == '') || (accName!=null && accName!='' && accName.trim().length < 3)){
+			 				sepaNameEL.attr('style', 'outline: 0;border-color: red !important;');
+			 				$('#accNameNullValidaion').attr('style','display: ;color:red !important;font-size: 14px;float: right;');
+			 				$('#confirmButton').attr('disabled', 'disabled');
+			 			}
+			 		}
+			 		
+   				//]]>  
+			</script>
+		</f:verbatim>
+   	</body> 
+</html>	

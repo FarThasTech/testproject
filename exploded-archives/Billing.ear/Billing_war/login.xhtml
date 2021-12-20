@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+
+<h:head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" />
+    <title>#{messages.Login}</title>
+
+    <link rel="icon" type="image/x-icon" href="/resources/assets/img/favicon.ico"/>
+    
+   	<!-- Vendors Style-->
+	<link rel="stylesheet" type="text/css" href="/resources/assets/vendor_components/bootstrap/dist/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="/resources/assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="/resources/assets/css/skin_color.css" />
+
+	<!-- Vendor JS -->
+	<script src="/resources/assets/js/vendors.min.js"></script>
+	<script src="/resources/assets/js/pages/chat-popup.js"></script>
+    <script src="/resources/assets/icons/feather-icons/feather.min.js"></script>	
+    
+    
+</h:head>
+
+<body class="hold-transition theme-primary bg-img" style="background-image: url(/resources/assets/images/background/homepage.png)">
+	
+	<h:form>
+		<h:messages globalOnly="true" style="display:none;"/>
+	</h:form>
+	
+	<div class="container h-p100">
+		<div class="row align-items-center justify-content-md-center h-p100">	
+			
+			<div class="col-12">
+				<div class="row justify-content-center g-0">
+					<div class="col-lg-5 col-md-5 col-12">
+						<div class="bg-white rounded10 shadow-lg">
+							<div class="content-top-agile p-20 pb-0">
+								<h2 class="text-primary">#{messages.Lets_Get_Started}</h2>
+								<p class="mb-0">#{messages.Sign_In_Content} #{mainUtil.getInfoFromProperty('App_Name')}.</p>							
+							</div>
+							<div class="p-40">
+								<h:form >
+									<div class="form-group">
+										<div class="input-group mb-3">
+											<span class="input-group-text bg-transparent"><i class="fa fa-envelope"></i></span>
+											<input type="text" id="userName" jsf:value="#{credentials.username}" class="form-control ps-15 bg-transparent" placeholder="#{messages.Email}" />
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="input-group mb-3">
+											<span class="input-group-text  bg-transparent"><i class="fa fa-lock"></i></span>
+											<input type="password" id="password" jsf:value="#{credentials.password}" class="form-control ps-15 bg-transparent" placeholder="#{messages.Password}" />
+										</div>
+									</div>
+								  	<div class="row">
+										<div class="col-6">
+										  	<div class="checkbox">
+												<input type="checkbox" onclick="showPassword();" id="basic_checkbox_1" />
+												<label for="basic_checkbox_1">#{messages.Show_Password}</label>
+										  	</div>
+										</div>
+										<div class="col-6">
+										 	<div class="fog-pwd text-end">
+												<a href="forgotpassword.jsf" class="hover-warning"><i class="fa fa-lock"></i> #{messages.Forgot_Password}?</a><br />
+										  	</div>
+										</div>
+										<div class="col-12 text-center">
+										  	<button type="submit" id="login" jsf:action="#{identity.login}" class="btn btn-danger mt-10">#{messages.Log_In}</button>
+										</div>
+								  	</div>
+								</h:form>   
+								<div class="text-center">
+									<p class="mt-15 mb-0">#{messages.New_Here}? <a href="register.jsf" class="text-warning ms-5">#{messages.Create_An_Account}</a></p>
+								</div>	
+							</div>						
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <script>
+	// show and hide the password
+	function showPassword(){
+		var password = document.getElementById("password");
+	  	if (password.type === "password") {
+	  		password.type = "text";
+	  	} else {
+	  		password.type = "password";
+	  	}
+	}
+    </script>
+    
+</body>
+</html>

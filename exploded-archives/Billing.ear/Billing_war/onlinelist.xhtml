@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+   	<h:body> 
+    	<ui:composition template = "/layout/indextemplate.xhtml">
+       		<ui:define name = "content">
+	       		<h:head>
+					<style>
+
+						table.dataTable {
+							border-collapse: collapse !important;;
+						}
+						
+						.dataTables_info, .dataTables_length, .dt-buttons {
+						    display: inline-block !important;
+						}
+						
+						.dt-buttons {
+						    float: right;
+						}
+						
+						.fa {
+    						font-size: large;
+						}
+						
+						.theme-primary .dt-buttons .dt-button {
+ 		   					background-color: #f00;
+						}
+						
+						.dropdown-item.active, .dropdown-item:active {
+						    background-color:  blue !important;
+						    color: #fff !important;
+						}
+						
+						.dt-button-collection a:hover {
+						    color: #fff !important;
+						}
+						
+						.fa-info-circle:hover {
+						    color: #5992e7 !important;
+						}
+						
+						.btn-default {
+						    background-color: #e6e6e6 !important;
+						    color: #172b4c !important;
+						    border-color: #999999 !important;
+						}
+						
+						.dt-button-collection {
+							left: 0px !important;
+							max-height: 300px !important;
+							overflow-y: scroll;
+							overflow-x: hidden;
+						}
+						
+					</style>
+				</h:head>
+	       		<div class="content-wrapper">
+	  				<div class="container-full">
+	  					<div id="loader" />
+						<!-- Content Header (Page header) -->
+						<div class="content-header">
+							<div class="d-flex align-items-center">
+								<div class="me-auto">
+									<h3 class="page-title">#{messages.Finance}</h3>
+									<div class="d-inline-block align-items-center">
+										<nav>
+											<ol class="breadcrumb">
+												<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i></a></li>
+												<li class="breadcrumb-item" aria-current="page">#{messages.ManageFinance}</li>
+												<li class="breadcrumb-item active" aria-current="page">#{messages.Finance}</li>
+											</ol>
+										</nav>
+									</div>
+								</div>
+								<div class="ltrrtl-float">
+							  		<button type="button" class="btn btn-default pull-right" id="daterange-btn">
+										<span>
+								 			<i class="fa fa-calendar"></i> 
+										</span>
+										<i class="fa fa-caret-down"></i>
+							  		</button>
+								</div>
+								<div class="ltrrtl-float" style="padding: 5px;">
+									<a href="#" onclick="swal('#{messages.OnlineList_Date_Info}');" title="#{messages.OnlineList_Date_Info}"> 
+										<i class="fa fa-info-circle"> </i>
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<!-- Main content -->
+						<section class="content">
+		  					<div class="row">
+								<div class="col-12">
+			  						<div class="box">
+										<!-- /.box-header -->
+										<div class="box-body">
+											<div>
+									  			<div id="refreshOnlineListSub">
+													<ui:include src="/onlinelist_sub.xhtml" />
+												</div>
+											</div>              
+										</div>
+										<!-- /.box-body -->
+							  		</div>
+							  		<!-- /.box -->          
+								</div>
+								<!-- /.col -->
+						  	</div>
+						  	<!-- /.row -->
+						</section>
+						<!-- /.content -->
+				  	</div>
+			  	</div>
+			  	<input type="hidden" id="startDate" value="#{financeBean.getCurrentDate()}" />
+			  	<input type="hidden" id="endDate" value="#{financeBean.getCurrentDate()}" />
+			  	<input type="hidden" id="dt_customrange" value="#{messages.Custom_Range}" />
+				<input type="hidden" id="dt_apply" value="#{messages.Apply}" />
+				<input type="hidden" id="dt_cancel" value="#{messages.Cancel}" />
+			  	
+			  	<f:verbatim>
+					<script type="text/javascript">
+		     			//<![CDATA[
+		     				
+		     				/************************* Date Filter For Recurring List *************************/ 
+		     				var dateformat = 'DD-MM-YYYY';
+    						var start =  $("#startDate").val();
+     						var end =  $("#endDate").val();
+    						var dt_customrange = $("#dt_customrange").val();
+		     				var dt_apply = $("#dt_apply").val();
+		     				var dt_cancel = $("#dt_cancel").val();
+		     				
+	     				 	$('#daterange-btn').daterangepicker({
+	     				 		startDate: start,
+							    endDate  : end,
+							    autoUpdateInput: false,
+							    opens: 'left',
+	     				 		locale: {
+	     				    		format: dateformat
+     				            },
+					        	ranges   : {
+						          	'#{messages.Today}'       : [moment(), moment()],
+						          	'#{messages.Yesterday}'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+						          	'#{messages.Last_7_Days}' : [moment().subtract(6, 'days'), moment()],
+						          	'#{messages.Last_30_Days}': [moment().subtract(29, 'days'), moment()],
+						          	'#{messages.This_Month}'  : [moment().startOf('month'), moment().endOf('month')],
+						          	'#{messages.Last_Month}'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+					        	}
+					      	},
+					      	function (start, end) {
+					        	$('#daterange-btn span').html(start.format(dateformat) + ' - ' + end.format(dateformat));
+					      	});
+	     				 	
+	     				 	$(".daterangepicker .ranges li:eq(6)").html(dt_customrange);
+			     			$(".daterangepicker .ranges .range_inputs .applyBtn").text(dt_apply);
+			     			$(".daterangepicker .ranges .range_inputs .cancelBtn").text(dt_cancel);
+	     				 	
+	     				 	changeDateFormat(start,end);
+	     				 	
+	     				 	function changeDateFormat(start, end) {
+	     				 		$('#daterange-btn span').html(start + ' - ' + end);
+					      	}
+	     				 	
+     				 	 	$("#daterange-btn").on('apply.daterangepicker', function(ev, picker) {
+     				 	 		var startDate = picker.startDate.format(dateformat);
+     				 	        var endDate = picker.endDate.format(dateformat);
+     				 	        $("#startDate").val(startDate);
+     				 	      	$("#endDate").val(endDate);
+		     			        blockUI();
+		     			       	$("#refreshOnlineListSub").load("onlinelist_sub.jsf", function() {
+		     				    	unblockUI();
+		     	  	  	   		}); 
+		     			    });
+
+		     			    $("#daterange-btn").on('cancel.daterangepicker', function(ev, picker) {
+		     					$(this).val('');
+		     			    });
+		     			    
+		     			   /************************* Date Filter For Recurring List *************************/
+		     			    
+			  			//]]>  
+					</script>
+				</f:verbatim>
+        	</ui:define> 
+      	</ui:composition> 
+   	</h:body> 
+</html>	

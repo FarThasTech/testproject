@@ -1,0 +1,610 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+	<h:head>
+		
+	</h:head>
+   	<h:body> 
+    	<ui:composition template = "/layout/indextemplate.xhtml">
+       		<ui:define name = "content">
+	       		<div class="content-wrapper">
+		       		<h:head>
+		       			<script src="/resources/assets/vendor_components/bootstrap-select/dist/js/bootstrap-select.js"></script>
+			       		<style>
+							.widget-user .widget-user-image > img {
+			     				width: 150px !important;
+			    				height: auto;
+			    				border: 3px solid #ffffff;
+							}
+							
+							.widget-user .widget-user-image {
+							    position: absolute;
+							    top: 60px !important;
+							    left: 41% !important;
+							    margin-left: -45px;
+							}
+							
+							.widget-user-image > img {
+			    				border: 3px solid #ffffff;
+							}
+							
+							.bootstrap-select {
+						    	border: 1px solid #ddd !important;
+						    	border-radius: 6px !important;
+						    	width: 100% !important;
+				   			}
+				   		
+			       		</style>
+		       		</h:head>
+		  			<div class="container-full">
+						<!-- Content Header (Page header) -->	  
+						<div class="content-header">
+							<div class="d-flex align-items-center">
+								<div class="me-auto">
+									<h3 class="page-title">#{messages.Profile}</h3>
+									<div class="d-inline-block align-items-center">
+										<nav>
+											<ol class="breadcrumb">
+												<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i></a></li>
+												<li class="breadcrumb-item active" aria-current="page">#{messages.Profile}</li>
+											</ol>
+										</nav>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<h:form>
+							<input type="hidden" value="#{profileBean.getProfileInformation()}" />
+						</h:form>
+	
+						<!-- Main content -->
+						<section class="content">
+					
+					  		<div class="row">
+					  		
+					  			<div class="col-lg-3 col-12">
+									<div class="box widget-user-header bg-img bbsr-0 bber-0" data-overlay="4" style="border-radius: 10px !important;" >
+										<div class="box-body text-center">
+											<div class="widget-user-image mb-20 mt-20">
+												<img id="orgLogoPreview" src="#{profileVO.companyLogoUrl}" class="rounded-circle" alt="" width="175" />
+												<h3 class="widget-user-username text-white mt-20" id="orgOldName">#{profileVO.companyName}</h3>
+											</div>
+										</div>
+									</div>
+							  	</div>
+						  		
+								<div class="col-12 col-lg-9 col-xl-9">
+								  	<div class="nav-tabs-custom">
+										<ul class="nav nav-tabs">
+										  	<li><a class="#{param['param'] eq null ? 'active' : ''}" href="#organizationInfo" data-bs-toggle="tab">#{messages.Organization_Info}</a></li>
+										  	<li><a class="#{param['param'] eq 'user' ? 'active' : ''}" href="#userInfo" data-bs-toggle="tab">#{messages.User_Info}</a></li>
+										  	<li style="display: none;"><a class="#{param['param'] eq 'payment' ? 'active' : ''}" href="#paymentGateway" data-bs-toggle="tab">#{messages.Payment_Gateway}</a></li>
+									   		<li><a class="" href="#ResetPassword" data-bs-toggle="tab">#{messages.Reset_Password}</a></li>
+										</ul>
+					
+										<div class="tab-content">
+							
+									  		<div class="tab-pane #{param['param'] eq null ? 'active' : ''}" id="organizationInfo">			
+												<div class="box no-shadow">		
+													<div class="box-body">
+														<div class="row">
+															<div class="col-md-4">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.Organization_Name} </label>
+															  		<input type="text" class="form-control" placeholder="#{messages.Organization_Name}" 
+															  			value="#{profileVO.companyName}" id="orgName" />
+																</div>
+														  	</div>
+														  	<div class="col-md-4">
+														  		<div class="form-group">
+															  		<label class="form-label">#{messages.Email}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.Email}" 
+															  			value="#{profileVO.companyEmail}" id="orgEmail" />
+																</div>
+														  	</div>
+														  	<div class="col-md-4">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.Telephone}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.Telephone}" 
+															  			value="#{profileVO.companyTelephone}" name="phoneNumber" id="orgTelephone" />
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-4">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.Address} </label>
+															  		<input type="text" class="form-control" placeholder="#{messages.Address}"
+															  			value="#{profileVO.companyAddress}" id="orgAddress" />
+																</div>
+														  	</div>
+														  	<div class="col-md-4">
+														  		<div class="form-group">
+															  		<label class="form-label">#{messages.House_No}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.House_No}" 
+															  			value="#{profileVO.companyHouseNo}" id="orgHouseNo" />
+																</div>
+														  	</div>
+														  	<div class="col-md-4">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.City}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.City}" 
+															  			value="#{profileVO.companyCity}"  id="orgCity" />
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-4">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.Country}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.Country}" 
+															  			value="#{profileVO.companyCountry}" id="orgCountry" />
+																</div>
+															</div>
+															<div class="col-md-4">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.PinCode}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.PinCode}" 
+															  			value="#{profileVO.companyZip}"  id="orgPinCode" />
+																</div>
+															</div>
+															<div class="col-md-4">
+														  		<div class="form-group">
+															  		<label class="form-label">#{messages.WebsiteUrl}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.WebsiteUrl}" 
+															  			value="#{profileVO.companyWebsiteUrl}" id="orgWebsiteUrl" />
+																</div>
+														  	</div>
+														</div>
+														<div class="row">
+															<div class="col-md-4">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.Currency}</label>
+															  		<select class="selectpicker" id="orgCurrency">
+															  			<ui:repeat var="currency" value="#{profileVO.currencyList}">
+																			<option selected="#{profileVO.currency ne null and profileVO.currency.id eq currency.id ? 'selected' : ''}" 
+																				value="#{currency.id}">#{currency.currencyCode}</option>
+																		</ui:repeat>
+																	</select>
+																</div>
+														  	</div>
+														  	<div class="col-md-4">
+																<div class="form-group">
+																	<label class="form-label">#{messages.Logo} <span class="badge badge-primary-light">#{messages.Max} 1MB</span></label>
+																	<br />
+															  		<div class="btn btn-info btn-file" style="cursor: pointer;">
+																	  	<i class="fa fa-paperclip"></i> #{messages.Upload}
+																	  	<input type="file" name="attachment" style="cursor: pointer;" id="orgLogo" 
+																		  	data-overwrite-initial="false" data-allowed-file-extensions='["jpeg","jpg","png","gif"]' 
+																		  	data-show-upload="false" accept=".jpeg, .jpg, .png, .gif" />
+																	</div>
+																	<img src="" id="updatedImage" class="img-fluid max-w-100" style="display:none;"/>
+																</div>
+																<input type="hidden" id="orgLogoName" />
+																<input type="hidden" id="orgLogoSource" />
+															</div>
+														</div>
+													  	<div class="box-footer text-end ltrrtl-float">
+															<button type="button" onclick="saveCompanyInfo();" class="btn btn-primary">
+														  		<i class="fa fa-save"></i> #{messages.Save} 
+															</button>
+														</div>
+													</div> 
+												</div>	
+										  	</div>
+												  <!-- /.tab-pane -->
+							
+										  	<div class="tab-pane #{param['param'] eq 'user' ? 'active' : ''}" id="userInfo">			
+												<div class="box no-shadow">		
+													<div class="box-body">
+														<div class="row">
+															<div class="col-md-4">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.First_Name}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.First_Name}" 
+															  			value="#{profileVO.firstName}" id="userFirstName" />
+																</div>
+														  	</div>
+														  	<div class="col-md-4">
+														  		<div class="form-group">
+															  		<label class="form-label">#{messages.Last_Name}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.Last_Name}" 
+															  			value="#{profileVO.lastName}" id="userLastName" />
+																</div>
+														  	</div>
+														  	<div class="col-md-4">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.Role}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.Role}" 
+															  			value="#{profileVO.role}" id="userRole" readonly="readonly" />
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-4">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.Language}</label>
+															  		<select class="selectpicker" id="userLanguage">
+															  			<ui:repeat var="lang" value="#{profileVO.langList}">
+																			<option selected="#{profileVO.langCode eq lang.langCode ? 'selected' : ''}" 
+																				value="#{lang.id}">#{lang.langCode}</option>
+																		</ui:repeat>
+																	</select>
+																</div>
+														  	</div>
+														  	<div class="col-md-4">
+														  		<div class="form-group">
+															  		<label class="form-label">#{messages.Email}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.Email}" 
+															  			value="#{profileVO.email}" id="userEmail" />
+																</div>
+														  	</div>
+														  	<div class="col-md-4">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.Telephone}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.Telephone}" 
+															  			value="#{profileVO.telephone}" name="phoneNumber" id="userTelephone" />
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-4">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.Address} </label>
+															  		<input type="text" class="form-control" placeholder="#{messages.Address}"
+															  			value="#{profileVO.address}" id="userAddress" />
+																</div>
+														  	</div>
+														  	<div class="col-md-4">
+														  		<div class="form-group">
+															  		<label class="form-label">#{messages.House_No}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.House_No}" 
+															  			value="#{profileVO.houseNo}" id="userHouseNo" />
+																</div>
+														  	</div>
+														  	<div class="col-md-4">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.City}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.City}" 
+															  			value="#{profileVO.city}"  id="userCity" />
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-4">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.Country}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.Country}" 
+															  			value="#{profileVO.country}" id="userCountry" />
+																</div>
+															</div>
+															<div class="col-md-4">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.PinCode}</label>
+															  		<input type="text" class="form-control" placeholder="#{messages.PinCode}" 
+															  			value="#{profileVO.zip}" id="userPinCode" />
+																</div>
+															</div>
+														</div>
+													  	<div class="box-footer text-end ltrrtl-float">
+															<button type="button" onclick="saveUserInfo();" class="btn btn-primary">
+													  			<i class="fa fa-save"></i> #{messages.Save} 
+															</button>
+														</div>
+													</div> 
+												</div>	
+										  	</div>
+											  
+										  	<div class="tab-pane #{param['param'] eq 'payment' ? 'active' : ''}" id="paymentGateway">		
+												<div class="box no-shadow">		
+													<h:form class="form-horizontal form-element col-12">
+													  	<div class="form-group row">
+															<label for="inputName" class="col-sm-2 form-label">Stripe</label>
+															<div class="col-sm-10" style="#{not profileVO.stripeConnected ? '' : 'display:none;'}">
+															  	<button type="button" class="btn btn-primary" value="connect" onclick="stripeConnect();" >#{messages.Connect}</button>
+															</div>
+															<div class="col-sm-10" style="#{profileVO.stripeConnected ? '' : 'display:none;'}">
+															  	<button type="button" class="btn btn-primary" value="connected" >#{messages.Connected}</button>
+															</div>
+													  	</div>
+													  
+													  	<input type="hidden" id="File_Size_Validation" value="#{messages.File_Size_Validation}" />
+														<input type="hidden" id="Type_Mismatched" value="#{messages.Type_Mismatched}" />
+														<input type="hidden" id="Org_Info_Updated_Successfully" value="#{messages.Org_Info_Updated_Successfully}" />
+														<input type="hidden" id="User_Info_Updated_Successfully" value="#{messages.User_Info_Updated_Successfully}" />
+													</h:form>
+												</div>			  
+									  		</div>
+									  		
+									  		<div class="tab-pane" id="ResetPassword">		
+												<div class="box no-shadow">		
+													<div class="box-body">		
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.Old_Password}</label>
+															  		<input type="password" class="form-control" placeholder="#{messages.Old_Password}" 
+															  			value="" id="oldPassword" />
+																</div>
+																<span class="error" id="oldPasswordErrorMsg" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+														  	</div>
+													  	</div>
+													  	<div class="row">
+															<div class="col-md-12">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.New_Password}</label>
+															  		<input type="password" class="form-control" placeholder="#{messages.New_Password}" 
+															  			value="" id="newPassword" />
+																</div>
+																<span class="error" id="passwordErrorMsg" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+														  	</div>
+													  	</div>
+													  	<div class="row">
+															<div class="col-md-12">
+																<div class="form-group">
+															  		<label class="form-label">#{messages.Confirm_Password}</label>
+															  		<input type="password" class="form-control" placeholder="#{messages.Confirm_Password}" 
+															  			value="" id="confirmPassword" />
+																</div>
+																<span class="error" id="confirmpasswordErrorMsg" style="display: none;">#{messages.Please_Fill_This_Field}</span>
+														  	</div>
+													  	</div>
+													  	<div class="row">
+															<div class="col-md-12">
+															  	<div class="checkbox">
+																	<input type="checkbox" onclick="showPassword();" id="basic_checkbox_1" />
+																	<label for="basic_checkbox_1">#{messages.Show_Password}</label>
+															  	</div>
+															</div>
+														</div>
+													  	<div class="box-footer text-end ltrrtl-float">
+															<button type="button" onclick="setpassword();" class="btn btn-primary">
+													  			<i class="fa fa-save"></i> #{messages.Reset} 
+															</button>
+														</div>
+												  	</div>
+												</div>	
+												<input type="hidden" id="password_length" value="#{messages.New_Password_Length}" />
+								  				<input type="hidden" id="password_mismatch" value="#{messages.New_Password_Mismatched}" />
+								  				<input type="hidden" id="Incorrect_Current_Password" value="#{messages.Incorrect_Current_Password}" />
+								  				<input type="hidden" id="Something_Went_Wrong" value="#{messages.Something_Went_Wrong}" />
+								  				<input type="hidden" id="Password_Reset_Successfully" value="#{messages.Password_Reset_Successfully}" />
+								  				
+								  				
+									  		</div>
+										</div>
+								  	</div>
+								</div>
+						  	</div>
+						</section>
+			  		</div>
+		  		</div>
+		  		<f:verbatim>
+					<script type="text/javascript">
+		     			//<![CDATA[
+		  		
+		     				function stripeConnect(){
+				  				blockUI();
+				  				$.ajax({
+						    		type: 'post',
+						    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:stripeBean.stripeAccountCreationUrl()',
+						    		data: { param: true },
+					    			success: function(res) {
+					    				var result = res.split('\n', 1);
+					    				window.location = result;
+						  	       	}
+						    	});
+				  			}
+				  		
+				  			$('#orgLogo').on("change", orgLogo);
+				  		
+					  		function orgLogo() {
+					  			if(this.files){
+							  		$.each(this.files, readAndUpload);
+						  		  	function readAndUpload(i, file) {
+							  		    if(file.size > 1000000){
+							  		    	swal($("#File_Size_Validation").val() + " 1MB");
+							  		      	return '';
+							  			}
+							  		 	if (!/\.(jpe?g|png|gif)$/i.test(file.name)){
+							  		 		swal($("#Type_Mismatched").val());
+							  	      		return '';
+							  	    	}
+							  		    var reader = new FileReader();
+							  		    $(reader).on("load", function() {
+					  		    	 		$('#orgLogoName').val(file.name);
+					  		    	 		$('#orgLogoSource').val(this.result);
+					  		    	 		$('#updatedImage').attr('src', this.result);
+					  		    	 		$("#updatedImage").attr('style', 'display: ;');
+							  			});
+						  				reader.readAsDataURL(file);
+						  			}
+					  			}
+					  		}
+					  		
+					  		function saveCompanyInfo(){
+					  			var orgName = $("#orgName").val();
+					  			var orgEmail = $("#orgEmail").val();
+					  			var orgTelephone = $("#orgTelephone").val();
+					  			var orgAddress = $("#orgAddress").val();
+					  			var orgHouseNo = $("#orgHouseNo").val();
+					  			var orgCity = $("#orgCity").val();
+					  			var orgCountry = $("#orgCountry").val();
+					  			var orgPinCode = $("#orgPinCode").val();
+					  			var orgCurrency = $("#orgCurrency").val();
+					  			var orgWebsiteUrl = $("#orgWebsiteUrl").val();
+					  			var orgLogoName = $("#orgLogoName").val();
+					  			var orgLogoSource = $("#orgLogoSource").val();
+
+					  			$.ajax({
+						    		type: 'post',
+						    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:profileBean.persistCompanyData()',
+						    		data: { orgName: orgName,
+							    			orgEmail: orgEmail,
+							    			orgTelephone: orgTelephone,
+							    			orgAddress: orgAddress,
+							    			orgHouseNo: orgHouseNo,
+							    			orgCity: orgCity,
+							    			orgCountry: orgCountry,
+							    			orgPinCode: orgPinCode,
+							    			orgCurrency: orgCurrency,
+							    			orgWebsiteUrl: orgWebsiteUrl,
+							    			orgLogoName: orgLogoName,
+							    			orgLogoSource: orgLogoSource
+						    			},
+					    			success: function(res) {
+					    				if(orgLogoSource != null && orgLogoSource != '' && orgLogoSource.trim().length > 0){
+					    					$('#orgLogoPreview').attr('src', orgLogoSource);
+					    				}
+					    				$('#orgOldName').text(orgName);
+					    				swal($("#Org_Info_Updated_Successfully").val());
+						  	       	}
+						    	});
+					  		}
+					  		
+					  		function saveUserInfo(){
+					  			var userFirstName = $("#userFirstName").val();
+					  			var userLastName = $("#userLastName").val();
+					  			var userLanguage = $("#userLanguage").val();
+					  			var userAddress = $("#userAddress").val();
+					  			var userHouseNo = $("#userHouseNo").val();
+					  			var userCity = $("#userCity").val();
+					  			var userCountry = $("#userCountry").val();
+					  			var userPinCode = $("#userPinCode").val();
+					  			var userEmail = $("#userEmail").val();
+					  			var userTelephone = $("#userTelephone").val();
+
+					  			$.ajax({
+						    		type: 'post',
+						    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:profileBean.persistUserData()',
+						    		data: { userFirstName: userFirstName,
+							    			userLastName: userLastName,
+							    			userLanguage: userLanguage,
+							    			userAddress: userAddress,
+							    			userHouseNo: userHouseNo,
+							    			userCity: userCity,
+							    			userCountry: userCountry,
+							    			userPinCode: userPinCode,
+							    			userEmail: userEmail,
+							    			userTelephone: userTelephone
+						    			},
+					    			success: function(res) {
+					    				swal($("#User_Info_Updated_Successfully").val());
+						  	       	}
+						    	});
+					  		}
+					  		
+					  		function setpassword(){
+					  			var oldPassword = $("#oldPassword").val();
+						    	var password = $("#newPassword").val();
+						    	var confirmPassword = $("#confirmPassword").val();
+						    	$("#oldPasswordErrorMsg").attr("style","display:none;");
+						    	$("#passwordErrorMsg").attr("style","display:none;");
+						    	$("#confirmpasswordErrorMsg").attr("style","display:none;");
+						    	if(oldPassword != null && oldPassword != '' && oldPassword.trim().length > 0 
+						    			&& password != null && password != '' && password.trim().length > 0
+						    			&& confirmPassword != null && confirmPassword != '' && confirmPassword.trim().length > 0){
+						    		$.ajax({
+							    		type: 'post',
+							    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:profileBean.validateOldPassword()',
+					    				data: {	password: oldPassword },
+				    					success: function (res) {
+						      				var result=(res.split('\n', 1));
+						     	 			var valid = result[0];
+						      				if(valid == "true"){
+						      					resetPassword(password, confirmPassword);
+						      				} else{
+						      					swal($("#Incorrect_Current_Password").val());
+						      				}
+						      	  		}
+							    	});
+						    	}else{
+						    		if(oldPassword == null || oldPassword == '' || oldPassword.trim().length == 0){
+						    			$("#oldPasswordErrorMsg").attr("style","color:red;display:block;float:right;");
+						    		}
+						    		if(password == null || password == '' || password.trim().length == 0){
+						    			$("#passwordErrorMsg").attr("style","color:red;display:block;float:right;");
+						    		}
+						    		if(confirmPassword == null || confirmPassword == '' || confirmPassword.trim().length == 0){
+						    			$("#confirmpasswordErrorMsg").attr("style","color:red;display:block;float:right;");
+						    		}
+						    	}
+							}
+					  		
+					  		function resetPassword(password, confirmPassword){
+					  			if(password != null && password != '' && password.trim().length > 0
+						    			&& confirmPassword != null && confirmPassword != '' && confirmPassword.trim().length > 0){
+						    		if(password.length < 10 && confirmPassword.length < 10 ){
+						    			swal($("#password_length").val());
+					        	    }else if(password == confirmPassword){
+					        	    	blockUI();
+					        	    	$.ajax({
+								    		type: 'post',
+								    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:profileBean.setNewPassword()',
+						    				data: { password: password },
+						    					success: function (res) {
+								      				var result=(res.split('\n', 1));
+								     	 			var valid = result[0];
+								      				if(valid == "true"){
+								      					swal($("#Password_Reset_Successfully").val());
+								      					$("#oldPassword").val('');
+												    	$("#newPassword").val('');
+												    	$("#confirmPassword").val('');
+								      				} else{
+								      					swal($("Something_Went_Wrong").val());
+								      				}
+								      	  		}
+								    	});
+							    	}else{
+							    		swal($("#password_mismatch").val());
+							    	}
+						    	}else{
+						    		if(password == null || password == '' || password.trim().length == 0){
+						    			$("#passwordErrorMsg").attr("style","color:red;display:block;float:right;");
+						    		}
+						    		if(confirmPassword == null || confirmPassword == '' || confirmPassword.trim().length == 0){
+						    			$("#confirmpasswordErrorMsg").attr("style","color:red;display:block;float:right;");
+						    		}
+						    	}
+					  		}
+					  		
+					  		function showPassword(){
+					  			var oldPassword = document.getElementById("oldPassword");
+					  		  	if (oldPassword.type === "password") {
+					  		  		oldPassword.type = "text";
+					  		  	} else {
+					  		  		oldPassword.type = "password";
+					  		  	}
+					  		  	
+					  		  	var password = document.getElementById("newPassword");
+					  		  	if (password.type === "password") {
+					  		  		password.type = "text";
+					  		  	} else {
+					  		  		password.type = "password";
+					  		  	}
+					  		  	
+						    	var confirmPassword = document.getElementById("confirmPassword");
+						    	if (confirmPassword.type === "password") {
+						    		confirmPassword.type = "text";
+					  		  	} else {
+					  		  		confirmPassword.type = "password";
+					  		  	}
+					  		}
+		  			
+			  			//]]>  
+					</script>
+				</f:verbatim>
+       		</ui:define> 
+   		</ui:composition> 
+   	</h:body> 
+</html>	

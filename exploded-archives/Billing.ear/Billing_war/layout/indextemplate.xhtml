@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://jboss.org/schema/seam/pdf"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib">
+	
+	<h:head>
+		
+		<meta charset="utf-8" />
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" />
+	    <title>#{mainUtil.getInfoFromProperty('App_Name')}</title>
+	    <link rel="icon" type="image/x-icon" href="/resources/assets/img/favicon.ico"/>
+	
+		<link rel="stylesheet" type="text/css" href="/resources/assets/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="/resources/assets/css/skin_color.css" />
+		<link rel="stylesheet" type="text/css" href="/resources/assets/css/vendors_css.css" />
+		
+		<!-- Vendor JS -->
+		<script src="/resources/assets/js/vendors.min.js"></script>
+		<script src="/resources/assets/js/template.js"></script>
+		<script src="/resources/assets/js/pages/dashboard.js"></script>
+		<script src="/resources/assets/vendor_components/select2/dist/js/select2.full.js"></script>
+		<script src="/resources/assets/vendor_plugins/input-mask/jquery.inputmask.js"></script>
+		<script src="/resources/assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+		<script src="/resources/assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js"></script>
+		<script src="/resources./assets/vendor_components/moment/min/moment.min.js"></script>
+		<script src="/resources/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+		<script src="/resources/assets/vendor_components/datatable/datatables.min.js"></script>
+		<script src="/resources/assets/vendor_components/sweetalert/sweetalert.min.js"></script>
+ 		<script src="/resources/assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js"></script>
+		
+		<style>
+		
+			.content-wrapper{
+				background-color: #dfe7f0;
+			}
+			
+			.main-header .app-menu .search-bx .input-group {
+			    margin-top: 5px;
+			}
+			
+			@media screen and (min-width: 280px) and (max-width: 767px) {
+				.main-header .app-menu .search-bx .input-group {
+				    margin-top: -15px;
+				}
+			}
+			
+		</style>
+		
+	</h:head>
+   	<h:body class="hold-transition light-skin sidebar-mini theme-primary fixed #{messages.direction}">
+	
+		<div class="wrapper">
+	  		<c:if test="#{activeUser ne null}">
+			    <!--  BEGIN HEADER  -->
+			 	<ui:insert name = "header">
+		     		<ui:include src="/layout/indexheader.xhtml" />				
+		     	</ui:insert>
+				<!--  END HEADER  -->
+  
+			  	<aside class="main-sidebar">
+					<!-- sidebar-->
+				    <section class="sidebar position-relative">	
+						<div class="multinav">
+						  	<div class="multinav-scroll" style="height: 100%;">	
+							  	<!-- sidebar menu-->
+							  	<ul class="sidebar-menu" data-widget="tree">	
+									<li class="">
+									  	<a href="home.jsf">
+											<i class="icon-Layout-4-blocks"><span class="path1"></span><span class="path2"></span></i>
+											<span>#{messages.Dashboard}</span>
+									  	</a>
+									</li>
+									<c:if test="#{s:hasRole('Administration')}">
+										<li class="treeview">
+										  	<a href="#">
+												<i class="icon-Library"><span class="path1"></span><span class="path2"></span></i>
+												<span>#{messages.Administration}</span>
+												<span class="pull-right-container">
+											  		<i class="fa fa-angle-right pull-right"></i>
+												</span>
+										  	</a>
+										  	<ul class="treeview-menu">
+										  		<c:if test="#{s:hasRole('MyTeam')}">
+													<li><a href="myteam.jsf"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>#{messages.MyTeam}</a></li>
+												</c:if>
+												<c:if test="#{s:hasRole('PaymentGateway')}">
+													<li><a href="mypayment.jsf"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>#{messages.Payment_Gateway}</a></li>
+												</c:if>
+										  	</ul>
+										</li>
+									</c:if>
+									
+									<c:if test="#{s:hasRole('ManageCampaign')}">
+										<li class="treeview">
+										  	<a href="#">
+												<i class="icon-File"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+												<span>#{messages.Manage_Campaign}</span>
+												<span class="pull-right-container">
+											  		<i class="fa fa-angle-right pull-right"></i>
+												</span>
+										  	</a>
+										  	<ul class="treeview-menu">
+										  		<c:if test="#{s:hasRole('CampaignCategory')}">
+													<li><a href="category.jsf"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>#{messages.CampaignCategory}</a></li>
+												</c:if>
+											  	<c:if test="#{s:hasRole('AddCampaign')}">
+													<li><a href="campaign.jsf"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>#{messages.Create_Campaign}</a></li>
+												</c:if>
+												<c:if test="#{s:hasRole('CampaignList')}">
+													<li><a href="campaignlist.jsf"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>#{messages.Campaign_List}</a></li>
+												</c:if>
+										  	</ul>
+										</li>
+									</c:if>
+									
+									<c:if test="#{s:hasRole('ManageDonor')}">
+										<li class="treeview">
+										  	<a href="#">
+												<i class="icon-User"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+												<span>#{messages.ManageDonor}</span>
+												<span class="pull-right-container">
+											  		<i class="fa fa-angle-right pull-right"></i>
+												</span>
+										  	</a>
+										  	<ul class="treeview-menu">
+										  		<c:if test="#{s:hasRole('DonorList')}">
+													<li><a href="donorlist.jsf"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>#{messages.DonorList}</a></li>
+												</c:if>
+										  	</ul>
+										</li>
+									</c:if>
+									
+									<c:if test="#{s:hasRole('ManageFinance')}">
+										<li class="treeview">
+										  	<a href="#">
+												<i class="icon-Chat-check"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+												<span>#{messages.ManageFinance}</span>
+												<span class="pull-right-container">
+											  		<i class="fa fa-angle-right pull-right"></i>
+												</span>
+										  	</a>
+										  	<ul class="treeview-menu">
+										  		<c:if test="#{s:hasRole('Finance')}">
+													<li><a href="financelist.jsf"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>#{messages.Finance}</a></li>
+												</c:if>
+												<c:if test="#{s:hasRole('OnlineDonorList')}">
+													<li><a href="onlinelist.jsf"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>#{messages.OnlineDonorList}</a></li>
+												</c:if>
+												<c:if test="#{s:hasRole('RecurringList')}">
+													<li><a href="recurringlist.jsf"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>#{messages.RecurringList}</a></li>
+												</c:if>
+										  	</ul>
+										</li>
+									</c:if>
+									
+									<c:if test="#{s:hasRole('ManageWaterWell') and false}">
+										<li class="treeview">
+										  	<a href="#">
+												<i class="icon-Chat-check"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+												<span>#{messages.ManageFinance}</span>
+												<span class="pull-right-container">
+											  		<i class="fa fa-angle-right pull-right"></i>
+												</span>
+										  	</a>
+										  	<ul class="treeview-menu">
+										  		<c:if test="#{s:hasRole('WaterWellList')}">
+													<li><a href="financelist.jsf"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>#{messages.Finance}</a></li>
+												</c:if>
+												<c:if test="#{s:hasRole('WaterWellCustomerList')}">
+													<li><a href="onlinelist.jsf"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>#{messages.OnlineDonorList}</a></li>
+												</c:if>
+										  	</ul>
+										</li>
+									</c:if>
+									
+						  		</ul>
+					  		</div>
+						</div>
+			    	</section>
+					<!-- <div class="sidebar-footer">
+						<a href="javascript:void(0)" class="link" data-bs-toggle="tooltip" title="Settings"><span class="icon-Settings-2"></span></a>
+						<a href="mailbox.html" class="link" data-bs-toggle="tooltip" title="Email"><span class="icon-Mail"></span></a>
+						<a href="#logout" onclick="sessionLogout();" class="link" data-bs-toggle="tooltip" title="Logout"><span class="icon-Lock-overturning">
+							<span class="path1"></span><span class="path2"></span></span>
+						</a>
+					</div> -->
+			  	</aside>
+		  	
+		  	</c:if>
+	 	 	
+	 	 	<!-- Content Wrapper. Contains page content -->
+		  	<ui:insert name="content" />
+		  	<!-- Content Wrapper -->
+		  	
+		  	<c:if test="#{activeUser ne null}">
+		    	<!--  BEGIN HEADER  -->
+			 	<ui:insert name = "header">
+		     		<ui:include src="/layout/indexfooter.xhtml" />				
+		     	</ui:insert>
+				<!--  END HEADER  -->
+			</c:if>
+		</div>
+		<c:if test="#{activeUser ne null}">
+			<input type="hidden" id="activeUsersId" name="activeUsersId" value="#{activeUser.id}" />
+	    	<input type="hidden" id="activeCompanyId" name="activeCompanyId" value="#{activeUser.company.id}" />
+	    	<input type="hidden" id="activeLocale" name="activeLocale" value="#{localeSelector.localeString}" />
+	    	<c:set scope="request" value="#{activeUser.company.currencies.currencyCode}" var="currencyCode"/>
+	    	<c:set scope="request" value="#{activeUser.company.currencies.currencySymbol}" var="currencySymbol"/>
+	 	</c:if>
+	 	<input type="hidden" id="EnabledMsg" value="#{messages.Enabled}" /> 
+		<input type="hidden" id="DisabledMsg" value="#{messages.Disabled}" />  
+		<input type="hidden" id="YesMsg" value="#{messages.Yes}" /> 
+		<input type="hidden" id="NoMsg" value="#{messages.No}" />
+		
+		<input type="hidden" id="db_results" value="#{messages.Results}" />
+		<input type="hidden" id="db_search" value="#{messages.Search}" />
+		<input type="hidden" id="db_searchdot" value="#{messages.Search}..." />
+		<input type="hidden" id="db_showingentries" value="#{messages.ShowingEntries}" />
+		<input type="hidden" id="db_to" value="#{messages.To}" />
+		<input type="hidden" id="db_of" value="#{messages.Of}" />
+		<input type="hidden" id="db_entriessmall" value="#{messages.EntriesSmall}" />
+		
+		<script type="text/javascript">
+		
+			$('input[name="phoneNumber"]').on('input', function(){
+				var val  = $(this).val().replace(/[^0-9.]/g,'');
+				$(this).val(val);
+			});
+		
+			function sessionLogout(){
+				var domainUrl = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
+				$.ajax({
+		    		type: 'post',
+		    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:identity.logout()',
+	    			async: false,
+      	           	cache: false,
+		  	       	success: function(res) {
+		  	       		var redirectUrl = domainUrl + "/login.jsf";
+		  	       		window.location = redirectUrl;
+		  	       	}
+		    	});
+			}
+			
+			function changeLocaleString(localeString){
+				$.ajax({
+		    		type: 'post',
+		    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:languageBean.updateLocaleString()',
+    				data: {localeString: localeString},
+	    			async: false,
+      	           	cache: false,
+		  	       	success: function(res) {
+		  	       		location.reload(); 
+		  	       	}
+		    	});
+			}
+			
+			function redirectToDetails(fundGroupId){
+				blockUI();
+				$.ajax({
+		    		type: 'post',
+		    		url: 'CommonURL.jsf?actionMethod=CommonURL.xhtml:donorBean.execute()',
+    				data: { param: "redirect",
+    						fundGroupId: fundGroupId
+    					},
+		  	       	success: function() {
+		  	       		window.location = 'details.jsf';
+		  	       	}
+		    	});
+			}
+			
+			$('li').each(function(){
+           		if(window.location.href.indexOf($(this).find('a:first').attr('href'))>-1){
+               		$(this).parents('li').addClass('active').siblings().removeClass('active');
+	               	$(this).addClass('active').siblings().removeClass('active');
+               	}
+           	});
+			
+			function blockUI() {
+				$("#loader").attr("style","display: block;opacity: 0.5;");
+			}
+
+			function unblockUI() {
+				$("#loader").attr("style","display: none;");
+			}
+			
+	   	</script>
+	
+	</h:body>
+</html>	
