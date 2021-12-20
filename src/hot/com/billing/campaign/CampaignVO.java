@@ -13,6 +13,8 @@ public class CampaignVO {
 	
 	private String campaignName;
 	
+	private String campaignName1;
+	
 	private int prodGroupId;
 	
 	private String imageUrl;
