@@ -9,7 +9,7 @@ public class CategoryVO {
 
 	private int categoryId;
 	
-	private int categoryIds;
+	private int categoryIds; 
 	
 	private String categoryName;
 	
